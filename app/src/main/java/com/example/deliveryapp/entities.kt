@@ -41,7 +41,7 @@ data class Restaurant(
     val location: String,
     val cuisineType: String,
     val avgRating: Double,
-    val reviewsCount: Int,
+    val reviewsCount:Int,
     val contactInfo: ContactInfo,
     val menu: List<MenuItem>,
     val createdAt: Date,
@@ -112,7 +112,7 @@ data class Review(
 
 // Notifications data class
 data class Notification(
-    val notificationId: String,
+    val notificationId:String,
     val userId: String,
     val orderId: String?,
     val message: String,
