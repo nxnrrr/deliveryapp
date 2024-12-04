@@ -37,12 +37,12 @@ data class SocialMedia(
 data class Restaurant(
     val restaurantId: String,
     val name: String,
-    val logo: String,
+    val logo: Int,
+    val cuisineType : String,
     val location: String,
-    val cuisineType: String,
     val avgRating: Double,
-    val reviewsCount: Int,
     val contactInfo: ContactInfo,
+    val img: Int,
     val menu: List<MenuItem>,
     val createdAt: Date,
     val updatedAt: Date
@@ -57,12 +57,12 @@ data class ContactInfo(
 
 // MenuItem data class
 data class MenuItem(
-    val itemId: String,
+    //val itemId: String,
     val restaurantId: String,
     val name: String,
     val description: String,
-    val price: Double,
-    val imageUrl: String,
+    val price: Float,
+    val imageUrl: Int,
     val available: Boolean
 )
 
