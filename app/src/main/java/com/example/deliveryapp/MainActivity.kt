@@ -27,13 +27,13 @@ class MainActivity : ComponentActivity() {
                 val navController = rememberNavController()
 
 
-                // État pour stocker la liste des restaurants récupérés
+
                 val restaurants = remember { mutableStateOf<List<Restaurant>>(emptyList()) }
                 val isLoading = remember { mutableStateOf(true) } // Pour indiquer que les données sont en cours de chargement
                 val errorMessage = remember { mutableStateOf<String?>(null) } // Pour afficher les messages d'erreur
 
 
-                // Lancer l'appel réseau pour récupérer les restaurants
+
                 LaunchedEffect(Unit) {
                     try {
                         isLoading.value = true
@@ -49,10 +49,10 @@ class MainActivity : ComponentActivity() {
                 }
 
 
-                // NavHost pour gérer la navigation
+
                 NavHost(navController = navController, startDestination = "restaurant_list") {
                     composable("restaurant_list") {
-                        // Passez l'état de chargement et d'erreur au composant RestaurantList
+
                         RestaurantList(restaurants.value, navController, isLoading.value, errorMessage.value)
                     }
 
