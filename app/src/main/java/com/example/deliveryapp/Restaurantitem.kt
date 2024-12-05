@@ -159,72 +159,8 @@ fun RestaurantItem(restaurant: Restaurant, onClick: () -> Unit) {
                             fontSize = 14.sp,
                             style = MaterialTheme.typography.bodyMedium
                         )*/
-                        Row() {
-                            Row(
-                                verticalAlignment = Alignment.CenterVertically,) {
-                                Icon(
-                                    imageVector = Icons.Default.Call,
-                                    contentDescription = null,
-                                    Modifier.size(16.dp),
-                                    tint = Color(0xFFA9411D)
-                                )
-                                Spacer(modifier = Modifier.width(3.dp))
-
-                                Text(
-                                    text = "${restaurant.contactInfo.phone}",
-                                    fontFamily = Montserrat,
-                                    fontSize = 12.sp,
-                                    color = Color(0xFF3E2C0F)
-
-                                )
-                            }
-                            Spacer(modifier = Modifier.width(20.dp))
-                          Row(verticalAlignment = Alignment.CenterVertically,) {
-                              Icon(
-                                  imageVector = Icons.Default.Email,
-                                  contentDescription = null,
-                                  Modifier.size(16.dp),
-                                  tint = Color(0xFFA9411D)
-                              )
-                              Spacer(modifier = Modifier.width(3.dp))
-
-                              Text(
-                                  text = "${restaurant.contactInfo.email}",
-                                  fontFamily = Montserrat,
-                                  fontSize = 12.sp,
-                                  color = Color(0xFF3E2C0F)
 
 
-                              )
-                          }
-                        }
-                        Row {
-                            Icon(
-                                painter = painterResource(id = R.drawable.twitter),
-                                contentDescription = "Instagram Icon",
-                                modifier = Modifier.size(16.dp),
-                                tint = Color(0xFFA9411D)
-
-                            )
-                            Spacer(modifier = Modifier.width(20.dp))
-
-                            Icon(
-                                painter = painterResource(id = R.drawable.face),
-                                contentDescription = "Instagram Icon",
-                                modifier = Modifier.size(16.dp),
-                                tint = Color(0xFFA9411D)
-
-                            )
-                            Spacer(modifier = Modifier.width(20.dp))
-
-                            Icon(
-                                painter = painterResource(id = R.drawable.insta),
-                                contentDescription = "Instagram Icon",
-                                modifier = Modifier.size(16.dp),
-                                tint = Color(0xFFA9411D)
-
-                            )
-                        }
                         Spacer(modifier = Modifier.height(5.dp))
 
                         Box(Modifier

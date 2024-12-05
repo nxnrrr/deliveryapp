@@ -29,8 +29,9 @@ class MainActivity : ComponentActivity() {
         setContent {
             DeliveryappTheme {
                 val navController = rememberNavController()
-                NavHost(navController = navController, startDestination = "restaurant_list") {
+                NavHost(navController = navController, startDestination = "acceuil") {
                     composable("restaurant_list") { RestaurantList(sampleRestaurants, navController) }
+                    composable("acceuil") { Acceuil( sampleRestaurants,sampleRestaurants,sampleRestaurants ,navController) }
 
                     composable("menu_list/{restaurantId}") { backStackEntry ->
                         val restaurantId = backStackEntry.arguments?.getString("restaurantId") ?: ""
