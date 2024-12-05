@@ -146,7 +146,7 @@ fun Acceuil( restaurants1: List<Restaurant>,restaurants2: List<Restaurant>,resta
 
                 )
                 )
-            Spacer(modifier = Modifier.height(15gitgit fetch
+            Spacer(modifier = Modifier.height(15
                 .dp))
             LazyColumn (
                 modifier = Modifier.fillMaxSize(),

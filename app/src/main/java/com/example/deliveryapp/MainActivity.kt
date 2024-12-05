@@ -21,6 +21,7 @@ import com.example.deliveryapp.ui.theme.DeliveryappTheme
 import com.example.projettdm.MenuDetailScreen
 import com.example.projettdm.MenuListScreen
 import sampleRestaurants
+import java.util.Date
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -29,10 +30,49 @@ class MainActivity : ComponentActivity() {
         setContent {
             DeliveryappTheme {
                 val navController = rememberNavController()
-                NavHost(navController = navController, startDestination = "acceuil") {
+                NavHost(navController = navController, startDestination = "add_review_restaurant") {
                     composable("restaurant_list") { RestaurantList(sampleRestaurants, navController) }
                     composable("acceuil") { Acceuil( sampleRestaurants,sampleRestaurants,sampleRestaurants ,navController) }
+                       val restaurant1 = Restaurant(
+                           restaurantId = "01",
+                           name = "La cité Asiatique",
+                           location = "Hydra, Alger",
+                           avgRating = 4.5,
+                           img = R.drawable.asi,
+                           logo = R.drawable.logo2,
+                           menu = listOf(
+                               MenuItem(
+                                   restaurantId = "01",
+                                   name = "Pizza Margherita",
+                                   imageUrl = R.drawable.pizza2,
+                                   price = 500f,
+                                   available = true,
+                                   description = "Delicious pasta"
+                               ),
+                               MenuItem(
+                                   restaurantId = "01",
+                                   name = "Pasta",
+                                   imageUrl = R.drawable.img1,
+                                   price = 900f,
+                                   available = true,
+                                   description = "Delicious pizza "
+                               )
+                           ),
+                           contactInfo = ContactInfo(
+                               phone = "05 40 95 35",
+                               email = "contact@otacos.com",
+                               socialMedia = listOf(
+                                   SocialMedia(type = "facebook", url = "https://facebook.com/otacos"),
+                                   SocialMedia(type = "instagram", url = "https://instagram.com/otacos")
+                               )
+                           ),
+                           createdAt = Date(),
+                           cuisineType = "Asian",
 
+                           updatedAt = Date()
+                       )
+                    composable("add_review_delivery") { RatingDeliveryScreen(restaurant1)}
+                    composable("add_review_restaurant") { RatingRestaurantScreen(restaurant1)}
                     composable("menu_list/{restaurantId}") { backStackEntry ->
                         val restaurantId = backStackEntry.arguments?.getString("restaurantId") ?: ""
                         MenuListScreen(navController, restaurantId)
