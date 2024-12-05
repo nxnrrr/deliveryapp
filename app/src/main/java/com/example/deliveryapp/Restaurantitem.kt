@@ -46,120 +46,102 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import coil.compose.rememberImagePainter
 import com.example.deliveryapp.ui.theme.Montserrat
 
 @Composable
+fun RestaurantLogo(logoUrl: String) {
+    Image(
+        painter = rememberImagePainter(logoUrl),
+        contentDescription = "Restaurant Logo",
+        modifier = Modifier
+            .size(70.dp)
+            .clip(CircleShape)
+            .border(4.dp, Color(0xFFFDDB6F), CircleShape),
+        contentScale = ContentScale.Crop
+    )
+}
+
+@Composable
 fun RestaurantItem(restaurant: Restaurant, onClick: () -> Unit) {
-        Card(
-            modifier = Modifier
-                .width(350.dp)
-                .padding(8.dp)
-                .clickable(onClick = onClick),
-
-    elevation = CardDefaults.cardElevation(4.dp),
-
-    colors = CardDefaults.cardColors(
-                containerColor = Color(0xFFFDDB6F)
-            )
+    Card(
+        modifier = Modifier
+            .width(350.dp)
+            .padding(8.dp)
+            .clickable(onClick = onClick),
+        elevation = CardDefaults.cardElevation(4.dp),
+        colors = CardDefaults.cardColors(containerColor = Color(0xFFFDDB6F))
+    ) {
+        Column(
+            modifier = Modifier.align(Alignment.CenterHorizontally)
         ) {
-            Column(
-                modifier = Modifier
+            Box {
+                /*Image(
+                    painter = rememberImagePainter(data = restaurant.img),
+                    contentDescription = "${restaurant.name} image",
+                    modifier = Modifier
+                        .size(350.dp, 100.dp),
+                    contentScale = ContentScale.Crop
+                )*/
+                Image(
+                    painter = painterResource(id = R.drawable.asi),
+                    contentDescription = "${restaurant.name} image",
+                    modifier = Modifier
+                        .size(350.dp, 100.dp),
+                    contentScale = ContentScale.Crop
+                )
 
-                    .align(Alignment.CenterHorizontally)
-            ) {
-                Box {
-
-                    Image(
-                        painter = painterResource(id = restaurant.img),
-                        contentDescription = "${restaurant.name} image",
-                        modifier = Modifier
-                            .size(width = 350.dp, height = 100.dp),
-
-                        contentScale = ContentScale.Crop
-
-                    )
-                    Box(
-                        modifier = Modifier
-                            .align(Alignment.Center)
-                            .offset(y = 45.dp)
-
-                    ) {
-                        Image(
-                            painter = painterResource(id = restaurant.logo),
-                            contentDescription = "${restaurant.name} image",
-                            modifier = Modifier
-                                .size(70.dp)
-                                .clip(CircleShape)
-                                .border(
-                                    width = 4.dp,
-                                    color = Color(0xFFFDDB6F),
-                                    shape = CircleShape
-                                )
-                                .align(Alignment.BottomCenter),
-                            contentScale = ContentScale.Crop
-                        )
-
-                    }
-
-                }
-                Spacer(modifier = Modifier.height(18.dp))
-                Row {
-
-                }
                 Box(
                     modifier = Modifier
-                        .align(Alignment.CenterHorizontally),
+                        .align(Alignment.Center)
+                        .offset(y = 45.dp)
                 ) {
-
-                    Column(
-                        modifier = Modifier.padding(16.dp),
-                        horizontalAlignment = Alignment.CenterHorizontally // Centers the texts horizontally
-                    ) {
-                        Text(
-                            text = "${restaurant.name}",
-                            style = MaterialTheme.typography.titleMedium.copy(
-                                fontFamily = Montserrat,
-                                fontWeight = FontWeight.Bold,
-                                fontSize = 20.sp,
-                                color = Color(0xFF3E2C0F)
-                            )
-                        )
-                        Spacer(modifier = Modifier.height(4.dp))
-
-                        Row(
-                            modifier = Modifier.fillMaxWidth(),
-                            horizontalArrangement = Arrangement.Center,
-                        )
-
-
-                        {
-                            Icon(
-                                imageVector = Icons.Default.LocationOn,
-                                contentDescription = null,
-                                Modifier.size(16.dp),
-                                tint = Color(0xFFA9411D)
-                            )
-                            Spacer(modifier = Modifier.width(2.dp))
-
-                            Text(
-                                text = "${restaurant.location}",
-                                style = MaterialTheme.typography.bodyMedium.copy(
-                                    fontFamily = Montserrat,
-                                    fontSize = 12.sp, // Adjust font size as needed
-                                    color = Color(0xFF3E2C0F)
-                                )
-                            )
-                        }
-
-
-
-                        /*Text(
-                            text = "Rating: ${restaurant.avgRating}",
+                   // RestaurantLogo(restaurant.logo)
+                    Image(
+                        painter = painterResource(id = R.drawable.logo1), // Remplacez par votre ressource locale
+                        contentDescription = "Restaurant Logo",
+                        modifier = Modifier
+                            .size(70.dp)
+                            .clip(CircleShape)
+                            .border(4.dp, Color(0xFFFDDB6F), CircleShape),
+                        contentScale = ContentScale.Crop
+                    )
+                }
+            }
+            Spacer(modifier = Modifier.height(18.dp))
+            Column(
+                modifier = Modifier.padding(16.dp),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Text(
+                    text = restaurant.name,
+                    style = MaterialTheme.typography.titleMedium.copy(
+                        fontFamily = Montserrat,
+                        fontWeight = FontWeight.Bold,
+                        fontSize = 20.sp,
+                        color = Color(0xFF3E2C0F)
+                    )
+                )
+                Spacer(modifier = Modifier.height(4.dp))
+                Row {
+                    Icon(
+                        imageVector = Icons.Default.LocationOn,
+                        contentDescription = null,
+                        modifier = Modifier.size(16.dp),
+                        tint = Color(0xFFA9411D)
+                    )
+                    Spacer(modifier = Modifier.width(8.dp))
+                    Text(
+                        text = restaurant.location,
+                        style = MaterialTheme.typography.bodyMedium.copy(
                             fontFamily = Montserrat,
-                            fontSize = 14.sp,
-                            style = MaterialTheme.typography.bodyMedium
-                        )*/
-                        Row() {
+                            fontSize = 12.sp,
+                            color = Color(0xFF3E2C0F)
+                        )
+                    )
+                }
+               }
+                Row() {
                             Row(
                                 verticalAlignment = Alignment.CenterVertically,) {
                                 Icon(
@@ -198,52 +180,66 @@ fun RestaurantItem(restaurant: Restaurant, onClick: () -> Unit) {
                               )
                           }
                         }
-                        Row {
-                            Icon(
-                                painter = painterResource(id = R.drawable.twitter),
-                                contentDescription = "Instagram Icon",
-                                modifier = Modifier.size(16.dp),
-                                tint = Color(0xFFA9411D)
+            Row {
+                // Vérification de la présence de Twitter dans les réseaux sociaux
+                restaurant.contactInfo.socialMedia.find { it.platform == "Twitter" }?.let {
+                    Icon(
+                        painter = painterResource(id = R.drawable.twitter),
+                        contentDescription = "Twitter Icon",
+                        modifier = Modifier.size(16.dp),
+                        tint = Color(0xFFA9411D)
+                    )
+                    Spacer(modifier = Modifier.width(20.dp))
+                }
 
-                            )
-                            Spacer(modifier = Modifier.width(20.dp))
+                // Vérification de la présence de Facebook dans les réseaux sociaux
+                restaurant.contactInfo.socialMedia.find { it.platform == "Facebook" }?.let {
+                    Icon(
+                        painter = painterResource(id = R.drawable.face),
+                        contentDescription = "Facebook Icon",
+                        modifier = Modifier.size(16.dp),
+                        tint = Color(0xFFA9411D)
+                    )
+                    Spacer(modifier = Modifier.width(20.dp))
+                }
 
-                            Icon(
-                                painter = painterResource(id = R.drawable.face),
-                                contentDescription = "Instagram Icon",
-                                modifier = Modifier.size(16.dp),
-                                tint = Color(0xFFA9411D)
+                // Vérification de la présence d'Instagram dans les réseaux sociaux
+                restaurant.contactInfo.socialMedia.find { it.platform == "Instagram" }?.let {
+                    Icon(
+                        painter = painterResource(id = R.drawable.insta),
+                        contentDescription = "Instagram Icon",
+                        modifier = Modifier.size(16.dp),
+                        tint = Color(0xFFA9411D)
+                    )
+                }
+            }
 
-                            )
-                            Spacer(modifier = Modifier.width(20.dp))
+            Spacer(modifier = Modifier.height(5.dp))
 
-                            Icon(
-                                painter = painterResource(id = R.drawable.insta),
-                                contentDescription = "Instagram Icon",
-                                modifier = Modifier.size(16.dp),
-                                tint = Color(0xFFA9411D)
+            Row(
+                horizontalArrangement = Arrangement.spacedBy(8.dp), // Espacement entre les Box
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                // Pour chaque type de cuisine dans la liste cuisineType
+                restaurant.cuisineType.forEach { cuisine ->
+                    Box(
+                        modifier = Modifier
+                            .clip(RoundedCornerShape(10.dp))
+                            .background(Color.White)
+                            .padding(vertical = 3.dp, horizontal = 8.dp)
+                    ) {
+                        Text(
+                            text = "$cuisine food",
+                            fontFamily = Montserrat,
+                            fontSize = 12.sp,
+                            color = Color(0xFF3E2C0F)
+                        )
+                    }
+                }
+            }
 
-                            )
-                        }
-                        Spacer(modifier = Modifier.height(5.dp))
 
-                        Box(Modifier
-                           .clip(
-                               RoundedCornerShape(10.dp)
-
-                           )
-                           .background(Color.White)
-                           .padding(vertical = 3.dp, horizontal = 8.dp)
-                        ) {
-                           Text(
-                               text = "${restaurant.cuisineType} food",
-                               fontFamily = Montserrat,
-                               fontSize = 12.sp,
-                               color = Color(0xFF3E2C0F)
-
-                           )
-                       }
-                        Spacer(modifier = Modifier.height(5.dp))
+            Spacer(modifier = Modifier.height(5.dp))
 
 
                     }
@@ -251,5 +247,4 @@ fun RestaurantItem(restaurant: Restaurant, onClick: () -> Unit) {
 
 
             }
-        }
-    }
+
