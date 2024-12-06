@@ -33,7 +33,6 @@ class MainActivity : ComponentActivity() {
                 val errorMessage = remember { mutableStateOf<String?>(null) } // Pour afficher les messages d'erreur
 
 
-
                 LaunchedEffect(Unit) {
                     try {
                         isLoading.value = true
@@ -50,13 +49,22 @@ class MainActivity : ComponentActivity() {
 
 
 
-                NavHost(navController = navController, startDestination = "restaurant_list") {
+                NavHost(navController = navController, startDestination = "accueil") {
+                    composable("accueil") {
+                        val italiens = restaurants.value.filter { "Italian" in  it.cuisineType }
+                        val traditionnal = restaurants.value.filter {"Traditionnal" in  it.cuisineType }
+                        val fastFood = restaurants.value.filter {"Fast" in  it.cuisineType  }
+                        val asian = restaurants.value.filter { "Asian" in  it.cuisineType }
+                        val mexican = restaurants.value.filter {"Mexican" in  it.cuisineType }
+                        val turkish = restaurants.value.filter {"Turkish" in  it.cuisineType  }
+                        val indian = restaurants.value.filter {"Indian" in  it.cuisineType  }
+
+                        Acceuil(italiens,traditionnal,fastFood,asian,mexican,turkish,indian, navController)
+                    }
                     composable("restaurant_list") {
 
                         RestaurantList(restaurants.value, navController, isLoading.value, errorMessage.value)
                     }
-
-
 
 
                 }

@@ -28,20 +28,29 @@ import androidx.navigation.NavHostController
 
 @Composable
 
-fun Acceuil( restaurants1: List<Restaurant>,restaurants2: List<Restaurant>,restaurants3: List<Restaurant>,navController:NavHostController) {
+fun Acceuil( restaurants1: List<Restaurant>,restaurants2: List<Restaurant>,restaurants3: List<Restaurant>,
+             restaurants4: List<Restaurant>,restaurants5: List<Restaurant>,restaurants6: List<Restaurant>,
+             restaurants7: List<Restaurant>,navController:NavHostController) {
     var searchText by remember { mutableStateOf("") }
     var selectedFilters by remember { mutableStateOf(setOf<String>()) }
     val data = listOf(
-        "Asian" to restaurants1,
-        "Traditional" to restaurants2,
-        "FastFood" to restaurants3
-    )
+        "ITALIAN" to restaurants1,
+        "TRADITIONNAL" to restaurants2,
+        "FAST FOOD" to restaurants3,
+        "ASIAN" to restaurants4,
+        "MEXICAN" to restaurants5,
+        "TURKISH" to restaurants6,
+        "INDIAN" to restaurants7
+    ).filter { it.second.isNotEmpty() }
+
+
+
 
     Box(
         modifier = Modifier
             .fillMaxSize()
             .background(Color(0xFFFFF8E1)) // Light background color
-            .padding(top=50.dp,start = 20.dp, end = 20.dp)
+            .padding(top=50.dp,start = 10.dp, end = 0.dp)
     ) {
         Column() {
             Row(
@@ -110,7 +119,7 @@ fun Acceuil( restaurants1: List<Restaurant>,restaurants2: List<Restaurant>,resta
             }
             // Filter buttons
             FilterButtons(
-                filters = listOf("Ratings", "Asian", "Traditional", "Syrian"),
+                filters = listOf("Ratings", "Italian", "Fast food", "Mexican", "Indian","Turkish", "Asian", "Traditionnal"),
                 selectedFilters = selectedFilters,
                 onFilterChange = { filter ->
                     selectedFilters = selectedFilters.toMutableSet().apply {
@@ -149,7 +158,7 @@ fun Acceuil( restaurants1: List<Restaurant>,restaurants2: List<Restaurant>,resta
             LazyColumn (
                 modifier = Modifier.fillMaxSize(),
                 verticalArrangement = Arrangement.spacedBy(16.dp),
-                contentPadding = PaddingValues(16.dp)
+                contentPadding = PaddingValues(0.dp)
             ) {
 
                 items(data) { (title, items) ->

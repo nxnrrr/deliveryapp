@@ -110,7 +110,8 @@ fun RestaurantItem(restaurant: Restaurant, onClick: () -> Unit) {
             }
             Spacer(modifier = Modifier.height(18.dp))
             Column(
-                modifier = Modifier.padding(16.dp),
+                modifier = Modifier.padding(12.dp)
+                    .align(Alignment.CenterHorizontally),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Text(
@@ -142,7 +143,7 @@ fun RestaurantItem(restaurant: Restaurant, onClick: () -> Unit) {
                 }
                }
                 Row() {
-                            Row(
+                            /*Row(
                                 verticalAlignment = Alignment.CenterVertically,) {
                                 Icon(
                                     imageVector = Icons.Default.Call,
@@ -160,8 +161,8 @@ fun RestaurantItem(restaurant: Restaurant, onClick: () -> Unit) {
 
                                 )
                             }
-                            Spacer(modifier = Modifier.width(20.dp))
-                          Row(verticalAlignment = Alignment.CenterVertically,) {
+                            Spacer(modifier = Modifier.width(20.dp))*/
+                          /*Row(verticalAlignment = Alignment.CenterVertically,) {
                               Icon(
                                   imageVector = Icons.Default.Email,
                                   contentDescription = null,
@@ -178,47 +179,52 @@ fun RestaurantItem(restaurant: Restaurant, onClick: () -> Unit) {
 
 
                               )
-                          }
+                          }*/
                         }
-            Row {
-                // Vérification de la présence de Twitter dans les réseaux sociaux
-                restaurant.contactInfo.socialMedia.find { it.platform == "Twitter" }?.let {
-                    Icon(
-                        painter = painterResource(id = R.drawable.twitter),
-                        contentDescription = "Twitter Icon",
-                        modifier = Modifier.size(16.dp),
-                        tint = Color(0xFFA9411D)
-                    )
-                    Spacer(modifier = Modifier.width(20.dp))
-                }
+                    Row (
+                        horizontalArrangement = Arrangement.Center,
+                        modifier = Modifier.fillMaxWidth()
+                    ) {
 
-                // Vérification de la présence de Facebook dans les réseaux sociaux
-                restaurant.contactInfo.socialMedia.find { it.platform == "Facebook" }?.let {
-                    Icon(
-                        painter = painterResource(id = R.drawable.face),
-                        contentDescription = "Facebook Icon",
-                        modifier = Modifier.size(16.dp),
-                        tint = Color(0xFFA9411D)
-                    )
-                    Spacer(modifier = Modifier.width(20.dp))
-                }
+                        // Vérification de la présence de Twitter dans les réseaux sociaux
+                        restaurant.contactInfo.socialMedia.find { it.platform == "Twitter" }?.let {
+                            Icon(
+                                painter = painterResource(id = R.drawable.twitter),
+                                contentDescription = "Twitter Icon",
+                                modifier = Modifier.size(16.dp),
+                                tint = Color(0xFFA9411D)
+                            )
+                            Spacer(modifier = Modifier.width(20.dp))
+                        }
 
-                // Vérification de la présence d'Instagram dans les réseaux sociaux
-                restaurant.contactInfo.socialMedia.find { it.platform == "Instagram" }?.let {
-                    Icon(
-                        painter = painterResource(id = R.drawable.insta),
-                        contentDescription = "Instagram Icon",
-                        modifier = Modifier.size(16.dp),
-                        tint = Color(0xFFA9411D)
-                    )
-                }
-            }
+                        // Vérification de la présence de Facebook dans les réseaux sociaux
+                        restaurant.contactInfo.socialMedia.find { it.platform == "Facebook" }?.let {
+                            Icon(
+                                painter = painterResource(id = R.drawable.face),
+                                contentDescription = "Facebook Icon",
+                                modifier = Modifier.size(16.dp),
+                                tint = Color(0xFFA9411D)
+                            )
+                            Spacer(modifier = Modifier.width(20.dp))
+                        }
+
+                        // Vérification de la présence d'Instagram dans les réseaux sociaux
+                        restaurant.contactInfo.socialMedia.find { it.platform == "Instagram" }?.let {
+                            Icon(
+                                painter = painterResource(id = R.drawable.insta),
+                                contentDescription = "Instagram Icon",
+                                modifier = Modifier.size(16.dp),
+                                tint = Color(0xFFA9411D)
+                            )
+                        }
+                    }
 
             Spacer(modifier = Modifier.height(5.dp))
 
             Row(
                 horizontalArrangement = Arrangement.spacedBy(8.dp), // Espacement entre les Box
-                verticalAlignment = Alignment.CenterVertically
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier.align(Alignment.CenterHorizontally)
             ) {
                 // Pour chaque type de cuisine dans la liste cuisineType
                 restaurant.cuisineType.forEach { cuisine ->
