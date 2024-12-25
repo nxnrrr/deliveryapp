@@ -21,6 +21,7 @@ import com.example.deliveryapp.ui.theme.DeliveryappTheme
 import com.example.projettdm.MenuDetailScreen
 import com.example.projettdm.MenuListScreen
 import sampleRestaurants
+import sampleReviews
 import java.util.Date
 
 class MainActivity : ComponentActivity() {
@@ -30,7 +31,7 @@ class MainActivity : ComponentActivity() {
         setContent {
             DeliveryappTheme {
                 val navController = rememberNavController()
-                NavHost(navController = navController, startDestination = "add_review_restaurant") {
+                NavHost(navController = navController, startDestination = "reviews") {
                     composable("restaurant_list") { RestaurantList(sampleRestaurants, navController) }
                     composable("acceuil") { Acceuil( sampleRestaurants,sampleRestaurants,sampleRestaurants ,navController) }
                        val restaurant1 = Restaurant(
@@ -73,6 +74,9 @@ class MainActivity : ComponentActivity() {
                        )
                     composable("add_review_delivery") { RatingDeliveryScreen(restaurant1)}
                     composable("add_review_restaurant") { RatingRestaurantScreen(restaurant1)}
+                    composable("reviews") { ReviewsScreen(sampleReviews)}
+                    composable("rest") { RestaurantScreen() }
+
                     composable("menu_list/{restaurantId}") { backStackEntry ->
                         val restaurantId = backStackEntry.arguments?.getString("restaurantId") ?: ""
                         MenuListScreen(navController, restaurantId)

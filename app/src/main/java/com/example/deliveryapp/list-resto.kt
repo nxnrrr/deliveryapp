@@ -12,6 +12,7 @@ import com.example.deliveryapp.MenuItem
 import com.example.deliveryapp.R
 import com.example.deliveryapp.Restaurant
 import com.example.deliveryapp.RestaurantItem
+import com.example.deliveryapp.Review
 import com.example.deliveryapp.SocialMedia
 import java.util.Date
 
@@ -170,3 +171,46 @@ val sampleRestaurants = listOf(
 fun getRestaurantByID(id: String, restaurants: List<Restaurant>): Restaurant? {
     return restaurants.find { it.restaurantId == id }
 }
+
+
+
+val sampleReviews = listOf(
+    Review(
+        reviewId = "R1",
+        restaurantId = "Rest123",
+        userId = "User001",
+        rating = 4.5,
+        comment = "Great food and amazing service! Will definitely come back.",
+        createdAt = Date() // Date actuelle
+    ),
+    Review(
+        reviewId = "R2",
+        restaurantId = "Rest456",
+        userId = "User002",
+        rating = 3.0,
+        comment = "The food was okay, but the service was quite slow, thnak u for u held, can u help me ",
+        createdAt = Date(System.currentTimeMillis() - 86400000L) // Hier
+    ),
+    Review(
+        reviewId = "R3",
+        restaurantId = "Rest789",
+        userId = "User003",
+        rating = 5.0,
+        comment = "Absolutely loved it! Highly recommend their desserts.",
+        createdAt = Date(System.currentTimeMillis() - 604800000L) // Une semaine plus tôt
+    ),
+    Review(
+        reviewId = "R4",
+        restaurantId = "Rest123",
+        userId = "User004",
+        rating = 2.0,
+        comment = "Not worth the price. The food was bland and overpriced.",
+        createdAt = Date(System.currentTimeMillis() - 2592000000L) // Un mois plus tôt
+    ),
+    Review(
+        reviewId = "R5",
+        restaurantId = "Rest456",
+        userId = "User005",
+        rating = 4.0,
+        comment = "Good experience overall, but the ambiance could be improved.",
+        createdAt = Date(System.currentTimeMillis() -2592000000L)))
