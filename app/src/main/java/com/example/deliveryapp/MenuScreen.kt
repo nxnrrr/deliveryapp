@@ -1,4 +1,4 @@
-package com.example.projettdm
+package com.example.deliveryapp
 
 import android.adservices.adid.AdId
 import androidx.compose.foundation.lazy.LazyColumn

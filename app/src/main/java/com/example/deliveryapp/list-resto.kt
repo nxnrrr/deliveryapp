@@ -55,7 +55,8 @@ val sampleRestaurants = listOf(
                 imageUrl = R.drawable.pizza2,
                 price = 500f,
                 available = true,
-                description = "Delicious pasta"
+                description = "Delicious pasta",
+                itemId = "01"
             ),
             MenuItem(
                 restaurantId = "01",
@@ -63,7 +64,9 @@ val sampleRestaurants = listOf(
                 imageUrl = R.drawable.img1,
                 price = 900f,
                 available = true,
-                description = "Delicious pizza "
+                description = "Delicious pizza ",
+                        itemId = "02"
+
             )
         ),
         contactInfo = ContactInfo(
@@ -93,7 +96,9 @@ val sampleRestaurants = listOf(
                 imageUrl = R.drawable.pizza2,
                 price = 500f,
                 available = true,
-                description = "Delicious pasta"
+                description = "Delicious pasta",
+                itemId = "01"
+
             ),
             MenuItem(
                 restaurantId = "03",
@@ -101,7 +106,9 @@ val sampleRestaurants = listOf(
                 imageUrl = R.drawable.img1,
                 price = 900f,
                 available = true,
-                description = "Delicious pizza "
+                description = "Delicious pizza ",
+                itemId = "02"
+
             )
         ),
         contactInfo = ContactInfo(
@@ -132,7 +139,9 @@ val sampleRestaurants = listOf(
             imageUrl = R.drawable.img1,
             price = 500f,
             available = true,
-            description = "Delicious pizza with fresh ingredients."
+            description = "Delicious pizza with fresh ingredients.",
+            itemId = "01"
+
         ),
                 MenuItem(
                 restaurantId = "02",
@@ -140,8 +149,10 @@ val sampleRestaurants = listOf(
         imageUrl = R.drawable.img1,
         price = 900f,
         available = true,
-        description = "Delicious pizza with fresh ingredients."
-    )
+        description = "Delicious pizza with fresh ingredients.",
+                    itemId = "02"
+
+                )
     ),
     contactInfo = ContactInfo(
         phone = "05 40 95 35",

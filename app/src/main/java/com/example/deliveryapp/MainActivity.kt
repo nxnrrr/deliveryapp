@@ -18,8 +18,6 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.deliveryapp.ui.theme.DeliveryappTheme
-import com.example.projettdm.MenuDetailScreen
-import com.example.projettdm.MenuListScreen
 import sampleRestaurants
 
 class MainActivity : ComponentActivity() {
@@ -40,6 +38,12 @@ class MainActivity : ComponentActivity() {
                         val restaurantId = backStackEntry.arguments?.getString("restaurantId") ?: ""
                         val menuName = backStackEntry.arguments?.getString("menuName") ?: ""
                         MenuDetailScreen(navController, restaurantId, menuName)
+                    }
+                    composable("panier2/{orderID}") { backStackEntry ->
+
+                        val orderID = backStackEntry.arguments?.getString("orderID") ?: ""
+
+                        FoodOrderScreen(navController)
                     }
                 }
             }

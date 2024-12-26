@@ -57,7 +57,7 @@ data class ContactInfo(
 
 // MenuItem data class
 data class MenuItem(
-    //val itemId: String,
+    val itemId: String,
     val restaurantId: String,
     val name: String,
     val description: String,
@@ -71,21 +71,22 @@ data class Order(
     val orderId: String,
     val userId: String,
     val restaurantId: String,
-    val items: List<OrderItem>,
-    val totalAmount: Double,
+    val items: MutableList<OrderItem>,
+    var totalAmount: Float,
     val status: String,
     val deliveryAddress: String,
     val deliveryNotes: String?,
     val deliveryLocation: DeliveryLocation?,
     val history: List<OrderHistory>,
     val createdAt: Date,
-    val updatedAt: Date
+    var updatedAt: Date
 )
 
 // OrderItem data class
 data class OrderItem(
     val itemId: String,
-    val quantity: Int
+    val imageUrl: Int,
+    var quantity: Int
 )
 
 // DeliveryLocation data class
