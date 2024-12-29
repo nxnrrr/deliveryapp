@@ -29,7 +29,7 @@ data class User(
 
 // SocialMedia data class
 data class SocialMedia(
-    val platform: String,
+    val type: String,
     val url: String
 )
 
@@ -37,12 +37,12 @@ data class SocialMedia(
 data class Restaurant(
     val restaurantId: String,
     val name: String,
-    val logo: String,
-    val cuisineType: List<String>,
+    val logo: Int,
+    val cuisineType : String,
     val location: String,
     val avgRating: Double,
     val contactInfo: ContactInfo,
-    val img: String,
+    val img: Int,
     val menu: List<MenuItem>,
     val createdAt: Date,
     val updatedAt: Date
@@ -57,12 +57,12 @@ data class ContactInfo(
 
 // MenuItem data class
 data class MenuItem(
-    //val itemId: String,
+    val itemId: String,
     val restaurantId: String,
     val name: String,
     val description: String,
     val price: Float,
-    val imageUrl: String,
+    val imageUrl: Int,
     val available: Boolean
 )
 
@@ -71,21 +71,22 @@ data class Order(
     val orderId: String,
     val userId: String,
     val restaurantId: String,
-    val items: List<OrderItem>,
-    val totalAmount: Double,
+    var items: MutableList<OrderItem>,
+    var totalAmount: Float,
     val status: String,
     val deliveryAddress: String,
-    val deliveryNotes: String?,
+    var deliveryNotes: String?,
     val deliveryLocation: DeliveryLocation?,
     val history: List<OrderHistory>,
     val createdAt: Date,
-    val updatedAt: Date
+    var updatedAt: Date
 )
 
 // OrderItem data class
 data class OrderItem(
     val itemId: String,
-    val quantity: Int
+    val imageUrl: Int,
+    var quantity: Int
 )
 
 // DeliveryLocation data class

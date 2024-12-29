@@ -1,5 +1,6 @@
 package com.example.deliveryapp
 
+import RestaurantList
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -21,6 +22,8 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import reviewsList
+import sampleRestaurants
 import java.util.Date
 
 class MainActivity : ComponentActivity() {
@@ -51,14 +54,14 @@ class MainActivity : ComponentActivity() {
         val sharedPrefs = context.getSharedPreferences("user_prefs", MODE_PRIVATE)
         val navController = rememberNavController()
         var isLoggedIn by remember { mutableStateOf(sharedPrefs.getBoolean("isLoggedIn", false)) }
-        val sharedImageName = "img1"
+        val sharedImageName = 1
 
         val restaurantsList = listOf(
             Restaurant(
                 restaurantId = "1",
                 name = "La Dolce Vita",
-                logo = sharedImageName,
-                cuisineType = listOf("Italian", "Pasta", "Pizza"),
+                logo = 1,
+                cuisineType = "Italian",
                 location = "Downtown",
                 avgRating = 4.7,
                 contactInfo = ContactInfo(
@@ -78,7 +81,7 @@ class MainActivity : ComponentActivity() {
                 restaurantId = "2",
                 name = "Sakura Delight",
                 logo = sharedImageName,
-                cuisineType = listOf("Japanese", "Sushi", "Ramen"),
+                cuisineType = "Italian",
                 location = "Midtown",
                 avgRating = 4.5,
                 contactInfo = ContactInfo(
@@ -98,7 +101,7 @@ class MainActivity : ComponentActivity() {
                 restaurantId = "3",
                 name = "Grill & Chill",
                 logo = sharedImageName,
-                cuisineType = listOf("American", "Burgers", "BBQ"),
+                cuisineType = "Italian",
                 location = "City Center",
                 avgRating = 4.3,
                 contactInfo = ContactInfo(
@@ -118,7 +121,7 @@ class MainActivity : ComponentActivity() {
                 restaurantId = "4",
                 name = "Le Petit Café",
                 logo = sharedImageName,
-                cuisineType = listOf("French", "Pastries", "Fine Dining"),
+                cuisineType = "Italian",
                 location = "Old Town",
                 avgRating = 4.8,
                 contactInfo = ContactInfo(
@@ -138,7 +141,7 @@ class MainActivity : ComponentActivity() {
                 restaurantId = "5",
                 name = "Spice Paradise",
                 logo = sharedImageName,
-                cuisineType = listOf("Indian", "Curry", "Vegetarian"),
+                cuisineType = "Italian",
                 location = "East End",
                 avgRating = 4.6,
                 contactInfo = ContactInfo(
@@ -158,7 +161,7 @@ class MainActivity : ComponentActivity() {
                 restaurantId = "6",
                 name = "El Buen Taco",
                 logo = sharedImageName,
-                cuisineType = listOf("Mexican", "Tacos", "Street Food"),
+                cuisineType = "Italian",
                 location = "West Side",
                 avgRating = 4.4,
                 contactInfo = ContactInfo(
@@ -178,7 +181,7 @@ class MainActivity : ComponentActivity() {
                 restaurantId = "7",
                 name = "Olive & Thyme",
                 logo = sharedImageName,
-                cuisineType = listOf("Mediterranean", "Healthy", "Seafood"),
+                cuisineType = "Italian",
                 location = "Harbor Front",
                 avgRating = 4.9,
                 contactInfo = ContactInfo(
@@ -203,6 +206,11 @@ class MainActivity : ComponentActivity() {
             composable("splash_one") {
                 SplashScreenOne(onNext = { navController.navigate("splash_two") },
                     onSkip = { navController.navigate("login") })
+            }
+            composable("tracking") {
+                    TrackingScreen(
+                        onBackPress = { navController.popBackStack() }
+                    )
             }
             composable("splash_two") {
                 SplashScreenTwo(onNext = { navController.navigate("splash_three") })
@@ -279,13 +287,15 @@ class MainActivity : ComponentActivity() {
                 )
             }
             composable("home") {
-                Acceuil(onLogout = {
+                Acceuil(
+                    onLogout = {
                     sharedPrefs.edit().putBoolean("isLoggedIn", false).apply()
                     isLoggedIn = false
                     navController.navigate("login") {
                         popUpTo("home") { inclusive = true }
                     }
                 },
+                    onSearch = { navController.navigate("restaurant_list") },
                     restaurants1 = restaurantsList,
                     restaurants2 = restaurantsList,
                     restaurants3 = restaurantsList,
@@ -293,6 +303,7 @@ class MainActivity : ComponentActivity() {
                     restaurants5 = restaurantsList,
                     restaurants6 = restaurantsList,
                     restaurants7 = restaurantsList,
+
                 )
             }
             composable("reset_password_email") {
@@ -323,6 +334,26 @@ class MainActivity : ComponentActivity() {
                     }
                 )
             }
+
+            composable("restaurant_list") { RestaurantList(sampleRestaurants, navController) }
+
+            composable("menu_list/{restaurantId}") { backStackEntry ->
+                val restaurantId = backStackEntry.arguments?.getString("restaurantId") ?: ""
+                MenuListScreen(navController, restaurantId,reviewsList)
+            }
+            composable("menu_detail/{restaurantId}/{menuName}") { backStackEntry ->
+                val restaurantId = backStackEntry.arguments?.getString("restaurantId") ?: ""
+                val menuName = backStackEntry.arguments?.getString("menuName") ?: ""
+                MenuDetailScreen(navController, restaurantId, menuName)
+            }
+            composable("panier2/{orderId}/{note}") { backStackEntry ->
+                val orderId = backStackEntry.arguments?.getString("orderId") ?: ""
+                val note = backStackEntry.arguments?.getString("note")
+
+                // Now you can pass these arguments to the FoodOrderScreen
+                FoodOrderScreen(navController)
+            }
         }
+
     }
 }
