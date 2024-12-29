@@ -19,7 +19,8 @@ import com.example.deliveryapp.R
 
 // Define the Montserrat FontFamily
 val Montserrat = FontFamily(
-    Font(R.font.meduim),
+
+    Font(R.font.meduim,FontWeight.Medium),
 
     Font(R.font.bold, FontWeight.Bold) // Bold font
 )

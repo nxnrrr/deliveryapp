@@ -34,18 +34,22 @@ class MainActivity : ComponentActivity() {
                         val restaurantId = backStackEntry.arguments?.getString("restaurantId") ?: ""
                         MenuListScreen(navController, restaurantId)
                     }
+
                     composable("menu_detail/{restaurantId}/{menuName}") { backStackEntry ->
                         val restaurantId = backStackEntry.arguments?.getString("restaurantId") ?: ""
                         val menuName = backStackEntry.arguments?.getString("menuName") ?: ""
                         MenuDetailScreen(navController, restaurantId, menuName)
                     }
-                    composable("panier2/{orderID}") { backStackEntry ->
 
-                        val orderID = backStackEntry.arguments?.getString("orderID") ?: ""
+                    composable("panier2/{orderId}/{note}") { backStackEntry ->
+                        val orderId = backStackEntry.arguments?.getString("orderId") ?: ""
+                        val note = backStackEntry.arguments?.getString("note")
 
-                        FoodOrderScreen(navController)
+                        // Now you can pass these arguments to the FoodOrderScreen
+                        FoodOrderScreen(navController, note)
                     }
                 }
+
             }
         }
     }

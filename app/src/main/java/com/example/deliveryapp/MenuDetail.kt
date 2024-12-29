@@ -116,7 +116,7 @@ fun MenuDetailScreen(navController: NavHostController, restaurantID: String, men
                 Spacer(modifier = Modifier.height(16.dp))
 
                 val totalPrice = item.price * quantity
-                Text(text = "Total Price: $totalPrice DZD", fontSize = 20.sp)
+                Text(text = "Prix: $totalPrice DZD", fontSize = 20.sp)
 
                 Spacer(modifier = Modifier.height(16.dp))
 
@@ -128,11 +128,10 @@ fun MenuDetailScreen(navController: NavHostController, restaurantID: String, men
                             imageUrl = item.imageUrl,
                             quantity = quantity
                         )
-
-                        OrderManager.addItemToOrder(newOrderItem)  // Add to the order
+                        OrderManager.addItemToOrder(newOrderItem,note)
 
                         // Navigate to the panier screen with the updated order
-                        navController.navigate("panier2/${OrderManager.getCurrentOrder().orderId}")
+                        navController.navigate("panier2/${OrderManager.getCurrentOrder().orderId}/${note}")
                     },
                     colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFFDDB6F))
                 ) {

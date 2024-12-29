@@ -7,11 +7,9 @@ import sampleRestaurants
 import java.util.Date
 
 object OrderManager {
-    // Use a mutable state to track the current order
     private var _currentOrder = mutableStateOf<Order?>(null)
     val currentOrder: State<Order?> get() = _currentOrder
 
-    // Function to get or create the current order
     internal fun getCurrentOrder(): Order {
         if (_currentOrder.value == null) {
             _currentOrder.value = Order(
@@ -44,23 +42,41 @@ object OrderManager {
         }
         updateTotalAmount()
     }
-    fun addItemToOrder(item: OrderItem) {
+
+    fun addItemToOrder(item: OrderItem, Note: String?) {
+        // Get the current order
         val order = getCurrentOrder()
 
         // Check if the item already exists in the order
         val existingItem = order.items.find { it.itemId == item.itemId }
         if (existingItem != null) {
+            // Update the quantity of the existing item
             existingItem.quantity += item.quantity
         } else {
+            // Add the new item to the order
             order.items.add(item)
         }
 
-        // Recalculate the total amount, ensuring the result is a Float
+        // Recalculate the total amount and cast it to Float
         order.totalAmount = (order.items.sumOf {
             (it.quantity * getItemPrice(it.itemId, order.restaurantId)).toDouble()
-        }).toFloat()  // Cast the result to Float
+        }).toFloat()
+
+        // Update the order's last update date
         order.updatedAt = Date()
+
+        // Append the new note to the delivery notes, ensuring it's not null
+        if (Note != null) {
+            order.deliveryNotes = order.deliveryNotes + " " + Note
+        }
+
+        // Debug: Log the updated order state
+        println("Updated Order: $order")
+
+        // Trigger state change to notify UI
+        _currentOrder.value = order
     }
+
     // Recalculate total amount based on the items in the order
     private fun updateTotalAmount() {
         val order = getCurrentOrder()
@@ -80,5 +96,13 @@ object OrderManager {
         val menuItem = restaurant?.menu?.find { it.itemId == itemId }
         return menuItem?.price ?: 0.0F
     }
+    internal fun getItemName(itemId: String, restaurantId: String): String {
+        val restaurants = sampleRestaurants
+        val restaurant = getRestaurantByID(restaurantId, restaurants)
+        val menuItem = restaurant?.menu?.find { it.itemId == itemId }
+        return menuItem?.name ?: ""
+    }
+
 }
+
 

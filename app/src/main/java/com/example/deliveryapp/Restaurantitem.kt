@@ -78,6 +78,7 @@ fun RestaurantItem(restaurant: Restaurant, onClick: () -> Unit) {
                         contentScale = ContentScale.Crop
 
                     )
+
                     Box(
                         modifier = Modifier
                             .align(Alignment.Center)

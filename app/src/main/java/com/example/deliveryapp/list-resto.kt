@@ -51,6 +51,26 @@ val sampleRestaurants = listOf(
         menu = listOf(
             MenuItem(
                 restaurantId = "01",
+                name = "Sushi",
+                imageUrl = R.drawable.sushi,
+                price = 900f,
+                available = true,
+                description = "Sushiiiiiii ",
+                itemId = "04"
+
+            ),
+            MenuItem(
+                restaurantId = "01",
+                name = "Noodles",
+                imageUrl = R.drawable.noodles,
+                price = 900f,
+                available = true,
+                description = "Sushiiiiiii ",
+                itemId = "03"
+
+            ),
+            MenuItem(
+                restaurantId = "01",
                 name = "Pizza Margherita",
                 imageUrl = R.drawable.pizza2,
                 price = 500f,
@@ -67,7 +87,9 @@ val sampleRestaurants = listOf(
                 description = "Delicious pizza ",
                         itemId = "02"
 
-            )
+            ),
+
+
         ),
         contactInfo = ContactInfo(
             phone = "05 40 95 35",
