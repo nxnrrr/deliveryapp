@@ -4,6 +4,7 @@ import android.adservices.adid.AdId
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -19,6 +20,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.LocationOn
@@ -26,6 +28,8 @@ import androidx.compose.material.icons.filled.Star
 import androidx.compose.material.icons.materialIcon
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -46,6 +50,8 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
@@ -53,9 +59,10 @@ import com.example.deliveryapp.MenuCard
 import com.example.deliveryapp.ui.theme.Montserrat
 import getRestaurantByID
 import sampleRestaurants
+import java.text.SimpleDateFormat
 
 @Composable
-fun MenuListScreen(navController: NavHostController, restaurantId: String) {
+fun MenuListScreen(navController: NavHostController, restaurantId: String,reviews: List<Review>) {
     val restaurants = sampleRestaurants
     val restaurant = getRestaurantByID(restaurantId, restaurants)
     val menuItems = restaurant?.menu ?: emptyList()
@@ -240,8 +247,16 @@ fun MenuListScreen(navController: NavHostController, restaurantId: String) {
             }
         }
         if (isClicked2.value == true){
-
-        }
+            Spacer(modifier = Modifier.height(12.dp))
+            LazyColumn(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
+                items(reviews) { review ->
+                   ReviewItem(review)
+                }
+            }}
         if (isClicked3.value == true){
             Column(
                 modifier = Modifier
@@ -325,5 +340,104 @@ fun MenuListScreen(navController: NavHostController, restaurantId: String) {
                         )
                     }
                 }}}
+
+}}
+
+@Composable
+fun ReviewItem(review: Review) {
+    Card(
+        modifier = Modifier
+            .width(350.dp).height(170.dp).clickable { }
+            .border(2.dp, Color(0xFFE0E0E0), shape = RoundedCornerShape(12.dp)),
+        colors = CardDefaults.cardColors(
+            containerColor = Color(0xFFFECD5E),
+
+            )
+
+    ) {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(start = 10.dp),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.Start
+        ) {
+            Box(
+                modifier = Modifier.size(40.dp),
+                contentAlignment = Alignment.BottomEnd
+            ) {
+
+                Image(
+                    painter = painterResource(id = R.drawable.logo2),
+                    contentDescription = "Profile Picture",
+                    modifier = Modifier
+                        .size(40.dp)
+                        .clip(CircleShape)
+                        .background(Color.LightGray),
+                    contentScale = ContentScale.Crop
+                )
+
+
+                Box(
+                    modifier = Modifier
+                        .size(18.dp)
+                        .clip(CircleShape)
+                        .background(Color(0xFFFFC107)),
+                    contentAlignment = Alignment.TopCenter
+                ) {
+                    Text(
+                        text = "${review.rating}",
+                        color = Color.White,
+                        fontSize = 8.sp,
+                        fontWeight = FontWeight.Bold
+                    )
+                }
+            }
+
+
+            Spacer(modifier = Modifier.width(10.dp))
+
+
+            Column(
+
+            ) {
+                Text(
+                    text = "Alyce Lambo",
+                    fontSize = 14.sp,
+                    fontFamily = FontFamily(Font(R.font.regular)),
+                    color = Color.Black
+                )
+
+                Text(
+                    text = "${SimpleDateFormat("dd/MM/yyyy").format(review.createdAt)}", // Date
+                    fontSize = 12.sp,
+                    fontFamily = FontFamily(Font(R.font.regular)),
+                    color = Color.Gray
+                )
+            }
+        }
+
+
+        Spacer(modifier = Modifier.height(4.dp))
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(start = 10.dp, end = 10.dp),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.Start
+        ) {
+
+            Text(
+                text = review.comment,
+                maxLines = 3,
+                overflow = TextOverflow.Ellipsis,
+                fontFamily = FontFamily(Font(R.font.regular)),
+                lineHeight = 16.sp,
+                fontSize = 14.sp,
+                softWrap = true,
+                modifier = Modifier.fillMaxWidth(),
+                textAlign = TextAlign.Justify
+            )
+        }
     }
 }

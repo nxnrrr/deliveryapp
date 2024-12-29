@@ -12,6 +12,7 @@ import com.example.deliveryapp.MenuItem
 import com.example.deliveryapp.R
 import com.example.deliveryapp.Restaurant
 import com.example.deliveryapp.RestaurantItem
+import com.example.deliveryapp.Review
 import com.example.deliveryapp.SocialMedia
 import java.util.Date
 
@@ -193,6 +194,36 @@ val sampleRestaurants = listOf(
 
 
 
+
+val review1 = Review(
+    reviewId = "review1",
+    restaurantId = "restaurant1",
+    userId = "user1",
+    rating = 4.5,
+    comment = "Great food, would definitely recommend!",
+    createdAt = Date() // Utilise la date actuelle
+)
+
+val review2 = Review(
+    reviewId = "review2",
+    restaurantId = "restaurant1",
+    userId = "user2",
+    rating = 3.0,
+    comment = "It was okay, but not exceptional.",
+    createdAt = Date() // Utilise la date actuelle
+)
+
+val review3 = Review(
+    reviewId = "review3",
+    restaurantId = "restaurant2",
+    userId = "user3",
+    rating = 5.0,
+    comment = "Amazing experience, everything was perfect!",
+    createdAt = Date() // Utilise la date actuelle
+)
+
+// Liste des reviews
+val reviewsList = listOf(review1, review2, review3)
 
 
 

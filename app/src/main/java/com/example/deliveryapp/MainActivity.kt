@@ -19,6 +19,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.deliveryapp.ui.theme.DeliveryappTheme
 import sampleRestaurants
+import reviewsList
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -32,7 +33,7 @@ class MainActivity : ComponentActivity() {
 
                     composable("menu_list/{restaurantId}") { backStackEntry ->
                         val restaurantId = backStackEntry.arguments?.getString("restaurantId") ?: ""
-                        MenuListScreen(navController, restaurantId)
+                        MenuListScreen(navController, restaurantId,reviewsList)
                     }
 
                     composable("menu_detail/{restaurantId}/{menuName}") { backStackEntry ->
@@ -46,7 +47,7 @@ class MainActivity : ComponentActivity() {
                         val note = backStackEntry.arguments?.getString("note")
 
                         // Now you can pass these arguments to the FoodOrderScreen
-                        FoodOrderScreen(navController, note)
+                        FoodOrderScreen(navController)
                     }
                 }
 
