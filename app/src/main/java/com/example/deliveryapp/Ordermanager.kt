@@ -3,9 +3,9 @@ package com.example.deliveryapp
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import getRestaurantByID
-import sampleRestaurants
+//import sampleRestaurants
 import java.util.Date
-
+/*
 object OrderManager {
     private var _currentOrder = mutableStateOf<Order?>(null)
     val currentOrder: State<Order?> get() = _currentOrder
@@ -104,5 +104,5 @@ object OrderManager {
     }
 
 }
-
+*/
 

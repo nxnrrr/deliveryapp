@@ -20,7 +20,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.example.deliveryapp.ui.theme.Montserrat
 import java.text.DecimalFormat
-
+/*
 @Composable
 fun FoodOrderScreen(navController: NavHostController) {
     val order = OrderManager.getCurrentOrder()
@@ -253,3 +253,4 @@ fun SummaryRow(label: String, amount: Double, isBold: Boolean = false) {
         )
     }
 }
+*/

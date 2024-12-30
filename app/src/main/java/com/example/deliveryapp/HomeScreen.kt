@@ -32,29 +32,44 @@ import coil.compose.rememberImagePainter
 
 @Composable
 
-fun Acceuil(navController: NavHostController, restaurants1: List<Restaurant>, restaurants2: List<Restaurant>, restaurants3: List<Restaurant>,
-            restaurants4: List<Restaurant>, restaurants5: List<Restaurant>, restaurants6: List<Restaurant>,
-            restaurants7: List<Restaurant>, onLogout: () -> Unit, onSearch: () -> Unit) {
+fun Acceuil(restaurantModel: RestaurantModel,navController:NavHostController) {
+    val restaurants = restaurantModel.restaurants.value
+
     var searchText by remember { mutableStateOf("") }
     var selectedFilters by remember { mutableStateOf(setOf<String>()) }
+
+    val italiens = restaurants.filter { "Italian" in  it.cuisineType }
+    val traditionnal = restaurants.filter {"Traditionnal" in  it.cuisineType }
+    val fastFood = restaurants.filter {"Fast" in  it.cuisineType  }
+    val asian = restaurants.filter { "Asian" in  it.cuisineType }
+    val mexican = restaurants.filter {"Mexican" in  it.cuisineType }
+    val turkish = restaurants.filter {"Turkish" in  it.cuisineType  }
+    val indian = restaurants.filter {"Indian" in  it.cuisineType  }
+
+    LaunchedEffect(true) {
+        restaurantModel.getRestaurants()
+    }
+
     val data = listOf(
-        "ITALIAN" to restaurants1,
-        "TRADITIONNAL" to restaurants2,
-        "FAST FOOD" to restaurants3,
-        "ASIAN" to restaurants4,
-        "MEXICAN" to restaurants5,
-        "TURKISH" to restaurants6,
-        "INDIAN" to restaurants7
+        "ITALIAN" to italiens,
+        "TRADITIONNAL" to traditionnal,
+        "FAST FOOD" to fastFood,
+        "ASIAN" to asian,
+        "MEXICAN" to mexican,
+        "TURKISH" to turkish,
+        "INDIAN" to indian
     ).filter { it.second.isNotEmpty() }
+
+
 
 
     Box(
         modifier = Modifier
             .fillMaxSize()
             .background(Color(0xFFFFF8E1)) // Light background color
-            .padding(top = 50.dp, start = 10.dp, end = 0.dp)
+            .padding(top=50.dp,start = 10.dp, end = 0.dp)
     ) {
-        Column {
+        Column() {
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 verticalAlignment = Alignment.Top // Aligns the text and image to the top
@@ -139,12 +154,15 @@ fun Acceuil(navController: NavHostController, restaurants1: List<Restaurant>, re
                         painter = painterResource(id = R.drawable.search),
                         contentDescription = "Search Icon",
                         tint = Color.Gray,
-                        modifier = Modifier.clickable { onSearch() }
+                        modifier = Modifier.clickable {
+
+
+                        }
                     )
                 },
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(top = 16.dp)
+                    .padding(top=16.dp)
                     .height(56.dp),
                 shape = RoundedCornerShape(24.dp),
                 singleLine = true,
@@ -152,7 +170,8 @@ fun Acceuil(navController: NavHostController, restaurants1: List<Restaurant>, re
 
                 )
             )
-            Spacer(modifier = Modifier.height(15.dp))
+            Spacer(modifier = Modifier.height(15
+                .dp))
             LazyColumn (
                 modifier = Modifier.fillMaxSize(),
                 verticalArrangement = Arrangement.spacedBy(16.dp),
@@ -166,7 +185,11 @@ fun Acceuil(navController: NavHostController, restaurants1: List<Restaurant>, re
                             text = title,
                             fontFamily = FontFamily(
                                 Font(R.font.meduim) // Directly reference the font here
-                            ))
+                            ),
+                            )
+
+
+
                         LazyRow(
                             modifier = Modifier
                                 .fillMaxWidth()
@@ -174,40 +197,14 @@ fun Acceuil(navController: NavHostController, restaurants1: List<Restaurant>, re
                         ) {
                             items(items) { item ->
                                 RestaurantItem(item) {
-                                     navController.navigate("menu_list/${item.restaurantId}")
+                                    navController.navigate("menu_list/${item.restaurantId}")
                                 }
                             }
                         }
                     }
-                }}
-//            Box(
-//                modifier = Modifier
-//                    .fillMaxWidth()
-//                    .padding(16.dp),
-//            ) {
-//                LazyColumn(
-//                    horizontalAlignment = Alignment.CenterHorizontally,
-//                    modifier = Modifier
-//                        .fillMaxWidth()
-//                ) {
-//                    items(restaurants) { restaurant ->
-//                        RestaurantItem(restaurant) {
-//                            navController.navigate("menu_list/${restaurant.restaurantId}")
-//                        }
-//                        Spacer(modifier = Modifier.height(8.dp))
-//                    }
-//                }
-
-
-
-
-            }}}
-
-
-
+                }}}}}
 
 @Composable
-
 fun FilterButtons(filters: List<String>, selectedFilters: Set<String>, onFilterChange: (String) -> Unit) {
     LazyRow(
         modifier = Modifier
@@ -249,171 +246,4 @@ fun FilterButton(text: String, isSelected: Boolean, onClick: () -> Unit) {
 
 }
 
-
-@Composable
-fun RestaurantLogo(logoUrl: String) {
-    Image(
-        painter = rememberAsyncImagePainter(logoUrl),
-        contentDescription = "Restaurant Logo",
-        modifier = Modifier
-            .size(70.dp)
-            .clip(CircleShape)
-            .border(4.dp, Color(0xFFFDDB6F), CircleShape),
-        contentScale = ContentScale.Crop
-    )
-}
-
-@Composable
-fun RestaurantItem(restaurant: Restaurant, onClick: () -> Unit) {
-    Card(
-        modifier = Modifier
-            .width(350.dp)
-            .padding(8.dp)
-            .clickable(onClick = onClick),
-        elevation = CardDefaults.cardElevation(4.dp),
-        colors = CardDefaults.cardColors(containerColor = Color(0xFFFDDB6F))
-    ) {
-        Column(
-            modifier = Modifier.align(Alignment.CenterHorizontally)
-        ) {
-            Box {
-                Image(
-                    painter = rememberImagePainter(data = restaurant.img),
-                    contentDescription = "${restaurant.name} image",
-                    modifier = Modifier
-                        .size(350.dp, 100.dp),
-                    contentScale = ContentScale.Crop
-                )
-                Image(
-                    painter = painterResource(id = R.drawable.asi),
-                    contentDescription = "${restaurant.name} image",
-                    modifier = Modifier
-                        .size(350.dp, 100.dp),
-                    contentScale = ContentScale.Crop
-                )
-
-                Box(
-                    modifier = Modifier
-                        .align(Alignment.Center)
-                        .offset(y = 45.dp)
-                ) {
-                    // RestaurantLogo(restaurant.logo)
-                    Image(
-                        painter = painterResource(id = R.drawable.logo1), // Remplacez par votre ressource locale
-                        contentDescription = "Restaurant Logo",
-                        modifier = Modifier
-                            .size(70.dp)
-                            .clip(CircleShape)
-                            .border(4.dp, Color(0xFFFDDB6F), CircleShape),
-                        contentScale = ContentScale.Crop
-                    )
-                }
-            }
-            Spacer(modifier = Modifier.height(18.dp))
-            Column(
-                modifier = Modifier
-                    .padding(12.dp)
-                    .align(Alignment.CenterHorizontally),
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                Text(
-                    text = restaurant.name,
-                    style = MaterialTheme.typography.titleMedium.copy(
-                        // fontFamily = Montserrat,
-                        fontWeight = FontWeight.Bold,
-                        fontSize = 20.sp,
-                        color = Color(0xFF3E2C0F)
-                    )
-                )
-                Spacer(modifier = Modifier.height(4.dp))
-                Row {
-                    Icon(
-                        imageVector = Icons.Default.LocationOn,
-                        contentDescription = null,
-                        modifier = Modifier.size(16.dp),
-                        tint = Color(0xFFA9411D)
-                    )
-                    Spacer(modifier = Modifier.width(8.dp))
-                    Text(
-                        text = restaurant.location,
-                        style = MaterialTheme.typography.bodyMedium.copy(
-                            // fontFamily = Montserrat,
-                            fontSize = 12.sp,
-                            color = Color(0xFF3E2C0F)
-                        )
-                    )
-                }
-            }
-//            Row (
-//                horizontalArrangement = Arrangement.Center,
-//                modifier = Modifier.fillMaxWidth()
-//            ) {
-//
-//                // Vérification de la présence de Twitter dans les réseaux sociaux
-//                restaurant.contactInfo.socialMedia.find { it.platform == "Twitter" }?.let {
-//                    Icon(
-//                        painter = painterResource(id = R.drawable.twitter),
-//                        contentDescription = "Twitter Icon",
-//                        modifier = Modifier.size(16.dp),
-//                        tint = Color(0xFFA9411D)
-//                    )
-//                    Spacer(modifier = Modifier.width(20.dp))
-//                }
-//
-//                // Vérification de la présence de Facebook dans les réseaux sociaux
-//                restaurant.contactInfo.socialMedia.find { it.platform == "Facebook" }?.let {
-//                    Icon(
-//                        painter = painterResource(id = R.drawable.face),
-//                        contentDescription = "Facebook Icon",
-//                        modifier = Modifier.size(16.dp),
-//                        tint = Color(0xFFA9411D)
-//                    )
-//                    Spacer(modifier = Modifier.width(20.dp))
-//                }
-//
-//                // Vérification de la présence d'Instagram dans les réseaux sociaux
-//                restaurant.contactInfo.socialMedia.find { it.platform == "Instagram" }?.let {
-//                    Icon(
-//                        painter = painterResource(id = R.drawable.insta),
-//                        contentDescription = "Instagram Icon",
-//                        modifier = Modifier.size(16.dp),
-//                        tint = Color(0xFFA9411D)
-//                    )
-//                }
-//            }
-
-            Spacer(modifier = Modifier.height(5.dp))
-
-            Row(
-                horizontalArrangement = Arrangement.spacedBy(8.dp), // Espacement entre les Box
-                verticalAlignment = Alignment.CenterVertically,
-                modifier = Modifier.align(Alignment.CenterHorizontally)
-            ) {
-                // Pour chaque type de cuisine dans la liste cuisineType
-                restaurant.cuisineType.forEach { cuisine ->
-                    Box(
-                        modifier = Modifier
-                            .clip(RoundedCornerShape(10.dp))
-                            .background(Color.White)
-                            .padding(vertical = 3.dp, horizontal = 8.dp)
-                    ) {
-                        Text(
-                            text = "$cuisine food",
-                            // fontFamily = Montserrat,
-                            fontSize = 12.sp,
-                            color = Color(0xFF3E2C0F)
-                        )
-                    }
-                }
-            }
-
-
-            Spacer(modifier = Modifier.height(5.dp))
-
-
-        }
-    }
-
-
-}
 

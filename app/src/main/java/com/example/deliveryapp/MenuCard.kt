@@ -58,12 +58,12 @@ fun MenuCard(menuItem: MenuItem, onClick: () -> Unit) {
                             .background(Color(0xFFFDDB6F)), // Box background color
                         contentAlignment = Alignment.Center // Center the content inside the Box
                     ) {
-                        Image(
+                        /*Image(
                             painter = painterResource(menuItem.imageUrl), // Replace with your image resource
                             contentDescription = null,
                             modifier = Modifier
                                 .size(110.dp) // Image size
-                        )
+                        )*/
                     }
 
 

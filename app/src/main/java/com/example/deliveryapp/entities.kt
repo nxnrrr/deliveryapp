@@ -29,7 +29,7 @@ data class User(
 
 // SocialMedia data class
 data class SocialMedia(
-    val type: String,
+    val platform: String,
     val url: String
 )
 
@@ -37,12 +37,12 @@ data class SocialMedia(
 data class Restaurant(
     val restaurantId: String,
     val name: String,
-    val logo: Int,
-    val cuisineType : String,
+    val logo: String,
+    val cuisineType: List<String>,
     val location: String,
     val avgRating: Double,
     val contactInfo: ContactInfo,
-    val img: Int,
+    val img: String,
     val menu: List<MenuItem>,
     val createdAt: Date,
     val updatedAt: Date
@@ -62,7 +62,7 @@ data class MenuItem(
     val name: String,
     val description: String,
     val price: Float,
-    val imageUrl: Int,
+    val imageUrl: String,
     val available: Boolean
 )
 

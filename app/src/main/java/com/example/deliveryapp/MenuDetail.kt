@@ -17,8 +17,8 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.example.deliveryapp.ui.theme.Montserrat
 import getRestaurantByID
-import sampleRestaurants
-
+//import sampleRestaurants
+/*
 @Composable
 fun MenuDetailScreen(navController: NavHostController, restaurantID: String, menuName: String) {
     val restaurants = sampleRestaurants
@@ -145,4 +145,4 @@ fun MenuDetailScreen(navController: NavHostController, restaurantID: String, men
             }
         }
     }
-}
+}*/
