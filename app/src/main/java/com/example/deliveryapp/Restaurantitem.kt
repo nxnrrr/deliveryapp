@@ -8,44 +8,34 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Call
-import androidx.compose.material.icons.filled.Email
-import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.LocationOn
 
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
-import androidx.compose.ui.platform.LocalDensity
 
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.modifier.modifierLocalOf
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import coil.compose.rememberImagePainter
 import com.example.deliveryapp.ui.theme.Montserrat
 
@@ -63,12 +53,14 @@ fun RestaurantLogo(logoUrl: String) {
 }
 
 @Composable
-fun RestaurantItem(restaurant: Restaurant, onClick: () -> Unit) {
+fun RestaurantItem(restaurant: Restaurant, navController: NavController) {
+    val restaurantId = restaurant._id;
     Card(
+
         modifier = Modifier
             .width(350.dp)
             .padding(8.dp)
-            .clickable(onClick = onClick),
+            .clickable(onClick = { navController.navigate("menu_list/$restaurantId") }),
         elevation = CardDefaults.cardElevation(4.dp),
         colors = CardDefaults.cardColors(containerColor = Color(0xFFFDDB6F))
     ) {
@@ -142,45 +134,7 @@ fun RestaurantItem(restaurant: Restaurant, onClick: () -> Unit) {
                     )
                 }
             }
-            Row() {
-                /*Row(
-                    verticalAlignment = Alignment.CenterVertically,) {
-                    Icon(
-                        imageVector = Icons.Default.Call,
-                        contentDescription = null,
-                        Modifier.size(16.dp),
-                        tint = Color(0xFFA9411D)
-                    )
-                    Spacer(modifier = Modifier.width(3.dp))
 
-                    Text(
-                        text = "${restaurant.contactInfo.phone}",
-                        fontFamily = Montserrat,
-                        fontSize = 12.sp,
-                        color = Color(0xFF3E2C0F)
-
-                    )
-                }
-                Spacer(modifier = Modifier.width(20.dp))*/
-                /*Row(verticalAlignment = Alignment.CenterVertically,) {
-                    Icon(
-                        imageVector = Icons.Default.Email,
-                        contentDescription = null,
-                        Modifier.size(16.dp),
-                        tint = Color(0xFFA9411D)
-                    )
-                    Spacer(modifier = Modifier.width(3.dp))
-
-                    Text(
-                        text = "${restaurant.contactInfo.email}",
-                        fontFamily = Montserrat,
-                        fontSize = 12.sp,
-                        color = Color(0xFF3E2C0F)
-
-
-                    )
-                }*/
-            }
             Row (
                 horizontalArrangement = Arrangement.Center,
                 modifier = Modifier.fillMaxWidth()

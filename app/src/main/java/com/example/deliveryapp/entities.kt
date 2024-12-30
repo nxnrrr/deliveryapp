@@ -35,7 +35,7 @@ data class SocialMedia(
 
 // Restaurants data class
 data class Restaurant(
-    val restaurantId: String,
+    val _id: String,
     val name: String,
     val logo: String,
     val cuisineType: List<String>,
@@ -57,7 +57,7 @@ data class ContactInfo(
 
 // MenuItem data class
 data class MenuItem(
-    val itemId: String,
+    val _id: String,
     val restaurantId: String,
     val name: String,
     val description: String,
@@ -119,4 +119,7 @@ data class Notification(
     val message: String,
     val read: Boolean,
     val createdAt: Date
+)
+data class ReviewsResponse(
+    val reviews: List<Review>
 )

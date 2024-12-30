@@ -28,11 +28,12 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavHostController
 import com.example.deliveryapp.ui.theme.Montserrat
 
 
 @Composable
-fun MenuCard(menuItem: MenuItem, onClick: () -> Unit) {
+fun MenuCard(navController: NavHostController, menuItem: MenuItem, function: () -> Unit) {
             Card(
 
     shape = RoundedCornerShape(16.dp),
@@ -41,7 +42,7 @@ fun MenuCard(menuItem: MenuItem, onClick: () -> Unit) {
                 ),
                 modifier = Modifier
                     .padding(horizontal = 20.dp, vertical = 10.dp)
-                    .clickable(onClick = onClick)
+                    .clickable(onClick = { navController.navigate("menu_detail/${menuItem._id}")  })
 
                 .fillMaxWidth()
             ) {
@@ -58,12 +59,12 @@ fun MenuCard(menuItem: MenuItem, onClick: () -> Unit) {
                             .background(Color(0xFFFDDB6F)), // Box background color
                         contentAlignment = Alignment.Center // Center the content inside the Box
                     ) {
-                        /*Image(
-                            painter = painterResource(menuItem.imageUrl), // Replace with your image resource
+                        Image(
+                            painter = painterResource(R.drawable.img1), // Replace with your image resource
                             contentDescription = null,
                             modifier = Modifier
                                 .size(110.dp) // Image size
-                        )*/
+                        )
                     }
 
 
@@ -96,7 +97,7 @@ fun MenuCard(menuItem: MenuItem, onClick: () -> Unit) {
 
                     }
 
-                    IconButton(onClick = onClick ) {
+                    IconButton(onClick = {} ) {
                         Icon(
                             imageVector = Icons.Default.Add,
                             contentDescription = "Increase",

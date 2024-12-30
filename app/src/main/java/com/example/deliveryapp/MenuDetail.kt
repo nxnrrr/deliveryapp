@@ -17,13 +17,124 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.example.deliveryapp.ui.theme.Montserrat
 import getRestaurantByID
-//import sampleRestaurants
-/*
+import java.util.Date
+
+val sampleRestaurants = listOf(
+    Restaurant(
+        _id = "01",
+        name = "La cité Asiatique",
+        location = "Hydra, Alger",
+        avgRating = 4.5,
+        img = "R.drawable.asi",
+        logo = "R.drawable.logo2",
+        menu = listOf(
+            MenuItem(
+                restaurantId = "01",
+                name = "Sushi",
+                imageUrl = "R.drawable.sushi",
+                price = 900f,
+                available = true,
+                description = "Sushiiiiiii ",
+                _id = "04"
+
+            ),
+            MenuItem(
+                restaurantId = "01",
+                name = "Noodles",
+                imageUrl = "R.drawable.noodles",
+                price = 900f,
+                available = true,
+                description = "Sushiiiiiii ",
+                _id = "03"
+
+            ),
+            MenuItem(
+                restaurantId = "01",
+                name = "Pizza Margherita",
+                imageUrl = "R.drawable.pizza2",
+                price = 500f,
+                available = true,
+                description = "Delicious pasta",
+                _id = "01"
+            ),
+            MenuItem(
+                restaurantId = "01",
+                name = "Pasta",
+                imageUrl = "R.drawable.img1",
+                price = 900f,
+                available = true,
+                description = "Delicious pizza ",
+                _id = "02"
+
+            ),
+
+
+            ),
+        contactInfo = ContactInfo(
+            phone = "05 40 95 35",
+            email = "contact@otacos.com",
+            socialMedia = listOf(
+                SocialMedia(platform = "facebook", url = "https://facebook.com/otacos"),
+                SocialMedia(platform = "instagram", url = "https://instagram.com/otacos")
+            )
+        ),
+        createdAt = Date(),
+        cuisineType = listOf("Asian"),
+
+        updatedAt = Date()
+    ),
+    Restaurant(
+        _id = "03",
+        name = "O'Tacos",
+        location = "Bab Ezzouar, Alger",
+        avgRating = 4.5,
+        img = "R.drawable.presto",
+        logo = "R.drawable.logo1",
+        menu = listOf(
+            MenuItem(
+                restaurantId = "03",
+                name = "Pizza Margherita",
+                imageUrl = "R.drawable.pizza2",
+                price = 500f,
+                available = true,
+                description = "Delicious pasta",
+                _id = "01"
+
+            ),
+            MenuItem(
+                restaurantId = "03",
+                name = "Pasta",
+                imageUrl = "R.drawable.img1",
+                price = 900f,
+                available = true,
+                description = "Delicious pizza ",
+                _id = "02"
+
+            )
+        ),
+        contactInfo = ContactInfo(
+            phone = "05 40 95 35",
+            email = "contact@otacos.com",
+            socialMedia = listOf(
+                SocialMedia(platform = "facebook", url = "https://facebook.com/otacos"),
+                SocialMedia(platform = "instagram", url = "https://instagram.com/otacos")
+            )
+        ),
+
+        createdAt = Date(),
+        cuisineType = listOf("Asian"),
+
+        updatedAt = Date()
+    )
+)
 @Composable
-fun MenuDetailScreen(navController: NavHostController, restaurantID: String, menuName: String) {
-    val restaurants = sampleRestaurants
-    val restaurant = getRestaurantByID(restaurantID, restaurants)
-    val menuItem = restaurant?.menu?.find { it.name == menuName }
+fun MenuDetailScreen(menuModel: MenuModel,navController: NavHostController, menuId: String) {
+    LaunchedEffect(true) {
+        menuModel.getMenubyId(menuId)
+    }
+    val menuItem = menuModel.menu1
+
+
     var note by remember { mutableStateOf("") }
     var quantity by remember { mutableStateOf(1) }
 
@@ -36,7 +147,7 @@ fun MenuDetailScreen(navController: NavHostController, restaurantID: String, men
                 contentAlignment = Alignment.Center
             ) {
                 Image(
-                    painter = painterResource(item.imageUrl),
+                    painter = painterResource(R.drawable.pizza),
                     contentDescription = null,
                     modifier = Modifier.size(150.dp)
                 )
@@ -122,8 +233,8 @@ fun MenuDetailScreen(navController: NavHostController, restaurantID: String, men
                     onClick = {
                         // Add the item to the current order using OrderManager
                         val newOrderItem = OrderItem(
-                            itemId = item.itemId,
-                            imageUrl = item.imageUrl,
+                            itemId = item._id,
+                            imageUrl = R.drawable.img1,
                             quantity = quantity
                         )
                         OrderManager.addItemToOrder(newOrderItem,note)
@@ -145,4 +256,7 @@ fun MenuDetailScreen(navController: NavHostController, restaurantID: String, men
             }
         }
     }
-}*/
+}
+
+
+

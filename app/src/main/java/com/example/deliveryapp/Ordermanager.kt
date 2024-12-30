@@ -3,9 +3,8 @@ package com.example.deliveryapp
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import getRestaurantByID
-//import sampleRestaurants
 import java.util.Date
-/*
+
 object OrderManager {
     private var _currentOrder = mutableStateOf<Order?>(null)
     val currentOrder: State<Order?> get() = _currentOrder
@@ -93,16 +92,15 @@ object OrderManager {
     internal fun getItemPrice(itemId: String, restaurantId: String): Float {
         val restaurants = sampleRestaurants
         val restaurant = getRestaurantByID(restaurantId, restaurants)
-        val menuItem = restaurant?.menu?.find { it.itemId == itemId }
+        val menuItem = restaurant?.menu?.find { it._id == itemId }
         return menuItem?.price ?: 0.0F
     }
     internal fun getItemName(itemId: String, restaurantId: String): String {
         val restaurants = sampleRestaurants
         val restaurant = getRestaurantByID(restaurantId, restaurants)
-        val menuItem = restaurant?.menu?.find { it.itemId == itemId }
+        val menuItem = restaurant?.menu?.find { it._id == itemId }
         return menuItem?.name ?: ""
     }
 
 }
-*/
 

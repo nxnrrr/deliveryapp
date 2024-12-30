@@ -36,6 +36,7 @@ import androidx.compose.material3.Text
 import androidx.compose.ui.draw.clip
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -53,23 +54,34 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.example.deliveryapp.ui.theme.Montserrat
-import getRestaurantByID
-//import sampleRestaurants
 import java.text.SimpleDateFormat
-/*
+
 @Composable
-fun MenuListScreen(navController: NavHostController, restaurantId: String,reviews: List<Review>) {
-   // val restaurants = sampleRestaurants
-    val restaurant = getRestaurantByID(restaurantId, restaurants)
-    val menuItems = restaurant?.menu ?: emptyList()
+fun MenuListScreen(restaurantModel: RestaurantModel,menuModel: MenuModel,navController: NavHostController, restaurantId: String) {
+
+    val menuItems = menuModel.menu.value
+    val restaurant = restaurantModel.resto
+    val reviews1 = restaurantModel.reviews.value
     var isClicked = remember { mutableStateOf(true) }
     var isClicked2 = remember { mutableStateOf(false) }
     var isClicked3 = remember { mutableStateOf(false) }
     var rating = remember { mutableStateOf(4)}
     var reviewText =  remember { mutableStateOf("") }
 
+    LaunchedEffect(true) {
+        restaurantModel.getRestaurantById(restaurantId)
+    }
+    LaunchedEffect(false) {
+        restaurantModel.reviews.value = emptyList()
+        restaurantModel.getReviewByResto(restaurantId)
+    }
 
 
+
+    LaunchedEffect(true) {
+        menuModel.menu.value = emptyList()
+        menuModel.getMenu(restaurantId)
+    }
 
     Column (modifier = Modifier
         .fillMaxWidth()
@@ -82,15 +94,15 @@ fun MenuListScreen(navController: NavHostController, restaurantId: String,review
 
             .fillMaxHeight(0.35f))
         {
-            /*Image(
-                painter = painterResource(id = restaurant!!.img),
+            Image(
+                painter = painterResource(id = R.drawable.asi),
                 contentDescription = "Restaurant image",
                 modifier = Modifier
                     .fillMaxWidth()
                     .fillMaxHeight()
                     .background(Color.Transparent),
                 contentScale = ContentScale.Crop
-            )*/
+            )
             Image(
                 painter = painterResource(id = R.drawable.shadow),
                 contentDescription = "Restaurant image",
@@ -105,36 +117,36 @@ fun MenuListScreen(navController: NavHostController, restaurantId: String,review
 
             Column(modifier = Modifier
                 .padding(horizontal = 20.dp, vertical = 70.dp)) {
-                /*Text(
-                    text = restaurant.name ,
+                Text(
+                    text = restaurant?.name ?: "Nom du restaurant non disponible",
                     style = MaterialTheme.typography.titleMedium.copy(
                         fontFamily = Montserrat,
                         fontWeight = FontWeight.Bold,
                         fontSize = 28.sp,
                         color = Color.White
                     )
-                )*/
+                )
                 Spacer(modifier = Modifier.height(4.dp))
 
                 Row() {
-                   Icon(
-                       imageVector = Icons.Default.LocationOn,
-                       contentDescription = null,
-                       Modifier.size(18.dp),
-                       tint = Color.White
-                   )
-                   Spacer(modifier = Modifier.width(2.dp))
-                   /*Text(
-                       text = restaurant.location,
-                       style = MaterialTheme.typography.titleMedium.copy(
-                           fontFamily = Montserrat,
-                           fontWeight = FontWeight.Medium,
+                    Icon(
+                        imageVector = Icons.Default.LocationOn,
+                        contentDescription = null,
+                        Modifier.size(18.dp),
+                        tint = Color.White
+                    )
+                    Spacer(modifier = Modifier.width(2.dp))
+                    Text(
+                        text =  restaurant?.name ?: "Localisation du restaurant non disponible",
+                        style = MaterialTheme.typography.titleMedium.copy(
+                            fontFamily = Montserrat,
+                            fontWeight = FontWeight.Medium,
 
-                           fontSize = 18.sp,
-                           color = Color.White
-                       )
-                   )*/
-               }
+                            fontSize = 18.sp,
+                            color = Color.White
+                        )
+                    )
+                }
             }
             Row(
                 modifier = Modifier
@@ -236,8 +248,7 @@ fun MenuListScreen(navController: NavHostController, restaurantId: String,review
             LazyColumn {
 
                 items(menuItems) { menuItem ->
-                    MenuCard(menuItem) {
-                        navController.navigate("menu_detail/${restaurant?.restaurantId}/${menuItem.name}")
+                    MenuCard(navController,menuItem) {
                     }
                 }
             }
@@ -249,8 +260,8 @@ fun MenuListScreen(navController: NavHostController, restaurantId: String,review
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.spacedBy(8.dp)
             ) {
-                items(reviews) { review ->
-                   ReviewItem(review)
+                items(reviews1) { review ->
+                    ReviewItem(review)
                 }
             }}
         if (isClicked3.value == true){
@@ -278,7 +289,7 @@ fun MenuListScreen(navController: NavHostController, restaurantId: String,review
                         color = Color.Black,
                         fontSize = 25.sp)
                     Text(
-                        text = " from ${restaurant!!.name} ?",
+                        text = " cc",
                         fontFamily = FontFamily(Font(R.font.meduim)),
                         fontWeight = FontWeight.Normal,
                         color = Color.Black,
@@ -337,7 +348,7 @@ fun MenuListScreen(navController: NavHostController, restaurantId: String,review
                     }
                 }}}
 
-}}
+    }}
 
 @Composable
 fun ReviewItem(review: Review) {
@@ -398,7 +409,7 @@ fun ReviewItem(review: Review) {
 
             ) {
                 Text(
-                    text = "Alyce Lambo",
+                    text = review.userId,
                     fontSize = 14.sp,
                     fontFamily = FontFamily(Font(R.font.regular)),
                     color = Color.Black
@@ -436,4 +447,5 @@ fun ReviewItem(review: Review) {
             )
         }
     }
-}*/
+}
+

@@ -1,3 +1,4 @@
+
 package com.example.deliveryapp
 
 import RestaurantList
@@ -23,7 +24,6 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import reviewsList
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -55,6 +55,7 @@ class MainActivity : ComponentActivity() {
         var isLoggedIn by remember { mutableStateOf(sharedPrefs.getBoolean("isLoggedIn", false)) }
         val sharedImageName = 1
         val restaurantModel = ViewModelProvider(this)[RestaurantModel::class.java]
+        val menuModel = ViewModelProvider(this)[MenuModel::class.java]
         val restaurants = remember { mutableStateOf<List<Restaurant>>(emptyList()) }
         val isLoading = remember { mutableStateOf(true) } // Pour indiquer que les données sont en cours de chargement
         val errorMessage = remember { mutableStateOf<String?>(null) } // Pour afficher les messages d'erreur
@@ -69,9 +70,9 @@ class MainActivity : ComponentActivity() {
                     onSkip = { navController.navigate("login") })
             }
             composable("tracking") {
-                    TrackingScreen(
-                        onBackPress = { navController.popBackStack() }
-                    )
+                TrackingScreen(
+                    onBackPress = { navController.popBackStack() }
+                )
             }
             composable("splash_two") {
                 SplashScreenTwo(onNext = { navController.navigate("splash_three") })
@@ -180,19 +181,22 @@ class MainActivity : ComponentActivity() {
                 )
             }
 
-            composable("restaurant_list") {
+            composable("restaurant_list?searchText={searchText}") { backStackEntry ->
+                // Récupérer le paramètre 'searchText' depuis les arguments de la route
+                val searchText = backStackEntry.arguments?.getString("searchText") ?: ""
 
-                RestaurantList(restaurants.value, navController, isLoading.value, errorMessage.value)
+                // Passer searchText au composant RestaurantList
+                RestaurantList(restaurantModel, navController, searchText, isLoading.value, errorMessage.value)
             }
+
 
             composable("menu_list/{restaurantId}") { backStackEntry ->
                 val restaurantId = backStackEntry.arguments?.getString("restaurantId") ?: ""
-                //MenuListScreen(navController, restaurantId,reviewsList)
+                MenuListScreen(restaurantModel,menuModel,navController, restaurantId)
             }
-            composable("menu_detail/{restaurantId}/{menuName}") { backStackEntry ->
-                val restaurantId = backStackEntry.arguments?.getString("restaurantId") ?: ""
-                val menuName = backStackEntry.arguments?.getString("menuName") ?: ""
-                //MenuDetailScreen(navController, restaurantId, menuName)
+            composable("menu_detail/{menuId}") { backStackEntry ->
+                val menuId = backStackEntry.arguments?.getString("menuId") ?: ""
+                MenuDetailScreen(menuModel,navController, menuId)
             }
             composable("panier2/{orderId}/{note}") { backStackEntry ->
                 val orderId = backStackEntry.arguments?.getString("orderId") ?: ""
@@ -205,3 +209,4 @@ class MainActivity : ComponentActivity() {
 
     }
 }
+

@@ -1,3 +1,5 @@
+
+
 package com.example.deliveryapp
 
 import androidx.compose.foundation.Image
@@ -10,8 +12,6 @@ import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.LocationOn
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -25,18 +25,15 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.navigation.NavController
 import androidx.navigation.NavHostController
-import coil.compose.rememberAsyncImagePainter
-import coil.compose.rememberImagePainter
 
 @Composable
 
 fun Acceuil(restaurantModel: RestaurantModel,navController:NavHostController) {
     val restaurants = restaurantModel.restaurants.value
 
+
     var searchText by remember { mutableStateOf("") }
-    var selectedFilters by remember { mutableStateOf(setOf<String>()) }
 
     val italiens = restaurants.filter { "Italian" in  it.cuisineType }
     val traditionnal = restaurants.filter {"Traditionnal" in  it.cuisineType }
@@ -49,6 +46,7 @@ fun Acceuil(restaurantModel: RestaurantModel,navController:NavHostController) {
     LaunchedEffect(true) {
         restaurantModel.getRestaurants()
     }
+
 
     val data = listOf(
         "ITALIAN" to italiens,
@@ -134,16 +132,6 @@ fun Acceuil(restaurantModel: RestaurantModel,navController:NavHostController) {
                 )
 
             }
-            // Filter buttons
-            FilterButtons(
-                filters = listOf("Ratings", "Italian", "Fast food", "Mexican", "Indian","Turkish", "Asian", "Traditionnal"),
-                selectedFilters = selectedFilters,
-                onFilterChange = { filter ->
-                    selectedFilters = selectedFilters.toMutableSet().apply {
-                        if (contains(filter)) remove(filter) else add(filter)
-                    }
-                }
-            )
 
             OutlinedTextField(
                 value = searchText,
@@ -155,21 +143,19 @@ fun Acceuil(restaurantModel: RestaurantModel,navController:NavHostController) {
                         contentDescription = "Search Icon",
                         tint = Color.Gray,
                         modifier = Modifier.clickable {
-
-
+                            navController.navigate(("restaurant_list?searchText=$searchText"))
                         }
                     )
                 },
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(top=16.dp)
+                    .padding(top = 16.dp)
                     .height(56.dp),
                 shape = RoundedCornerShape(24.dp),
                 singleLine = true,
-                colors = TextFieldDefaults.colors(
-
-                )
+                colors = TextFieldDefaults.colors()
             )
+
             Spacer(modifier = Modifier.height(15
                 .dp))
             LazyColumn (
@@ -186,7 +172,7 @@ fun Acceuil(restaurantModel: RestaurantModel,navController:NavHostController) {
                             fontFamily = FontFamily(
                                 Font(R.font.meduim) // Directly reference the font here
                             ),
-                            )
+                        )
 
 
 
@@ -196,13 +182,13 @@ fun Acceuil(restaurantModel: RestaurantModel,navController:NavHostController) {
 
                         ) {
                             items(items) { item ->
-                                RestaurantItem(item) {
-                                    navController.navigate("menu_list/${item.restaurantId}")
+                                RestaurantItem(item, navController)
+
                                 }
                             }
                         }
                     }
-                }}}}}
+                }}}}
 
 @Composable
 fun FilterButtons(filters: List<String>, selectedFilters: Set<String>, onFilterChange: (String) -> Unit) {
@@ -245,5 +231,6 @@ fun FilterButton(text: String, isSelected: Boolean, onClick: () -> Unit) {
     }
 
 }
+
 
 
