@@ -288,6 +288,8 @@ class MainActivity : ComponentActivity() {
             }
             composable("home") {
                 Acceuil(
+                    // restaurants = sampleRestaurants,
+                    navController = navController,
                     onLogout = {
                     sharedPrefs.edit().putBoolean("isLoggedIn", false).apply()
                     isLoggedIn = false
