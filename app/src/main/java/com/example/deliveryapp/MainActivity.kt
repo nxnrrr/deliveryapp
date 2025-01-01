@@ -83,27 +83,40 @@ class MainActivity : ComponentActivity() {
                 SplashScreenThree(onNext = { navController.navigate("login") })
             }
             composable("register") {
-                RegisterScreen(onRegisterSuccess = {
-                    navController.navigate("account_verification") {
-                        popUpTo("register") { inclusive = true }
-                    }
-                },
+                RegisterScreenOne(
+                    onNext = { navController.navigate("register_step_two")
+                    },
                     onLogin = {
                         navController.navigate("login") {
                             popUpTo("register") { inclusive = true }
                         }
-                    })
+                    }
+                )
             }
-            composable("account_verification") {
-                AccountVerificationScreen(
-                    onCodeSent = { navController.navigate("verification_code") },
-                    onBack = {
-                        navController.navigate("register") {
-                            popUpTo("account_verification") { inclusive = true }
+
+            composable("register_step_two") {
+                RegisterScreenTwo(onRegisterSuccess = {
+                        navController.navigate("verification_code") {
+                            popUpTo("register") { inclusive = true }
+                        }
+                    },
+                    onLogin = {
+                        navController.navigate("login") {
+                            popUpTo("register") { inclusive = true }
                         }
                     }
                 )
             }
+//            composable("account_verification") {
+//                AccountVerificationScreen(
+//                    onCodeSent = { navController.navigate("verification_code") },
+//                    onBack = {
+//                        navController.navigate("register") {
+//                            popUpTo("register_step_two") { inclusive = true }
+//                        }
+//                    }
+//                )
+//            }
             composable("verification_code") {
                 VerificationCodeScreen(
                     onVerificationSuccess = {
@@ -111,8 +124,10 @@ class MainActivity : ComponentActivity() {
                             popUpTo("verification_code") { inclusive = true }
                         }
                     },
-                    onBack = { navController.navigateUp() }
-                )
+                    onBack = { navController.navigate("register_step_two") {
+                        popUpTo("verification_code") { inclusive = true }
+                    }
+            } )
             }
             composable("final_step") {
                 AddingProfilePicture(

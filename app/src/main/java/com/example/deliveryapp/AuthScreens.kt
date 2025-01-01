@@ -49,16 +49,14 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
 @Composable
-fun RegisterScreen(
-    onRegisterSuccess: () -> Unit,
+fun RegisterScreenOne(
+    onNext: () -> Unit,
     onLogin: () -> Unit
 ) {
     var name by remember { mutableStateOf("") }
     var email by remember { mutableStateOf("") }
-    var password by remember { mutableStateOf("") }
+    var phoneNumber by remember { mutableStateOf("") }
     val context = LocalContext.current
-    var passwordVisible by remember { mutableStateOf(false) }
-    val visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation()
     val image = painterResource(id = R.drawable.header)
 
     Box(
@@ -154,12 +152,263 @@ fun RegisterScreen(
         Spacer(modifier = Modifier.height(16.dp)) // Add space between fields
 
         // Password Field Section
-        Text(fontSize = 17.sp, text = "Password", fontWeight = FontWeight.Bold)
+        Text(fontSize = 17.sp, text = "Phone Number", fontWeight = FontWeight.Bold)
         Spacer(modifier = Modifier.height(8.dp))
 
-        var isFocusedPassword by remember { mutableStateOf(false) }
 
+        var isFocusedPhone by remember { mutableStateOf(false) }
         TextField(
+            value = phoneNumber,
+            onValueChange = { input ->
+                if (input.matches(Regex("^\\d*\$"))) {
+                    phoneNumber = input
+                } },
+            modifier = Modifier
+                .fillMaxWidth()
+                .border(
+                    width = 1.dp,
+                    color = if (isFocusedPhone) Color(0xFFFFB700) else Color(0xFFEEEEEE), // Change border color based on focus
+                    shape = RoundedCornerShape(10.dp)
+                )
+                .onFocusChanged { focusState -> isFocusedPhone = focusState.isFocused },
+            colors = TextFieldDefaults.colors(
+                focusedTextColor = Color.Black,
+                unfocusedTextColor = Color.Black,
+                focusedContainerColor = Color.White,
+                unfocusedContainerColor = Color.White,
+                focusedIndicatorColor = Color.Transparent,
+                unfocusedIndicatorColor = Color.Transparent
+            ),
+            placeholder = {
+                Text(
+                    text = "Enter your phone number",
+                    color = Color.LightGray,
+                    fontSize = 16.sp
+                )
+            }
+        )
+
+
+        Button(
+            onClick = {
+                if (email.isNotEmpty() && phoneNumber.isNotEmpty() && name.isNotEmpty()) {
+                    val sharedPrefs =
+                        context.getSharedPreferences("user_prefs", MODE_PRIVATE)
+                    sharedPrefs.edit()
+                        .putString("password", phoneNumber)
+                        .putString("email", email)
+                        .putString("name", name)
+                        .apply()
+                    onNext()
+
+                } else {
+                    Toast.makeText(context, "Please fill in all fields", Toast.LENGTH_SHORT)
+                        .show()
+                }
+            },
+            modifier = Modifier
+                .fillMaxWidth()
+                .offset(y = 27.dp)
+                .padding(horizontal = 60.dp)
+                .height(60.dp),
+            colors = ButtonDefaults.buttonColors(
+                containerColor = Color(0xFFFFB700), // Background color
+                contentColor = Color.White  // Text color inside the button
+            ),
+            shape = RoundedCornerShape(28.5.dp),
+        ) {
+            Text(fontSize = 20.sp, text = "Next", fontWeight = FontWeight.Bold)
+        }
+        Spacer(modifier = Modifier.height(8.dp))
+        Row(
+            horizontalArrangement = Arrangement.Center,
+            modifier = Modifier
+                .fillMaxWidth()
+                .offset(y = 20.dp)
+                .padding(top = 10.dp),
+        ) {
+            Text(
+                text = "Already have an account? ",
+                fontSize = 17.sp,
+                fontWeight = FontWeight.Bold,
+                color = Color(0xFF5B5B5E)
+            )
+            Text(
+                text = "Login",
+                fontSize = 18.sp,
+                color = Color(0xFFA9411D),
+                fontWeight = FontWeight.Bold,
+                modifier = Modifier.clickable { onLogin() } // Clickable action for "Login"
+            )
+        }
+    }
+    Button(
+        onClick = { /* Google sign up logique wela maembalich */ },
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 60.dp)
+            .offset(y = 780.dp)
+            .height(56.dp),
+        colors = ButtonDefaults.buttonColors(
+            containerColor = Color.White, // Button background color
+            contentColor = Color.Black    // Default text/icon color
+        ),
+        shape = RoundedCornerShape(28.dp), // Rounded edges for the button
+        elevation = ButtonDefaults.buttonElevation(5.dp) // Shadow effect
+    ) {
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.Center,
+            modifier = Modifier.fillMaxSize()
+        ) {
+            Icon(
+                painter = painterResource(id = R.drawable.ic_google_logo),
+                contentDescription = "Google logo",
+                tint = Color.Unspecified,
+                modifier = Modifier.size(24.dp) // Icon size
+            )
+            Spacer(modifier = Modifier.width(8.dp)) // Space between icon and text
+            Text(
+                text = "Google",
+                fontSize = 16.sp,
+                fontWeight = FontWeight.Bold
+            )
+        }
+        Button(
+            onClick = {
+                if (email.isNotEmpty() && phoneNumber.isNotEmpty() && name.isNotEmpty()) {
+                    val sharedPrefs =
+                        context.getSharedPreferences("user_prefs", MODE_PRIVATE)
+                    sharedPrefs.edit()
+                        .putString("password", phoneNumber)
+                        .putString("email", email)
+                        .putString("name", name)
+                        .apply()
+                    onNext()
+
+                } else {
+                    Toast.makeText(context, "Please fill in all fields", Toast.LENGTH_SHORT)
+                        .show()
+                }
+            },
+            modifier = Modifier
+                .fillMaxWidth()
+                .offset(y = 27.dp)
+                .padding(horizontal = 60.dp)
+                .height(60.dp),
+            colors = ButtonDefaults.buttonColors(
+                containerColor = Color(0xFFFFB700), // Background color
+                contentColor = Color.White  // Text color inside the button
+            ),
+            shape = RoundedCornerShape(28.5.dp),
+        ) {
+            Text(fontSize = 20.sp, text = "Next", fontWeight = FontWeight.Bold)
+        }
+        Spacer(modifier = Modifier.height(8.dp))
+        Row(
+            horizontalArrangement = Arrangement.Center,
+            modifier = Modifier
+                .fillMaxWidth()
+                .offset(y = 20.dp)
+                .padding(top = 10.dp),
+        ) {
+            Text(
+                text = "Already have an account? ",
+                fontSize = 17.sp,
+                fontWeight = FontWeight.Bold,
+                color = Color(0xFF5B5B5E)
+            )
+            Text(
+                text = "Login",
+                fontSize = 18.sp,
+                color = Color(0xFFA9411D),
+                fontWeight = FontWeight.Bold,
+                modifier = Modifier.clickable { onLogin() } // Clickable action for "Login"
+            )
+        }
+    }
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .offset(y = 730.dp)
+            .padding(horizontal = 16.dp), // Adjusts spacing from screen edges
+        verticalAlignment = Alignment.CenterVertically, // Centers the text and dividers vertically
+        horizontalArrangement = Arrangement.SpaceBetween // Ensures spacing between elements
+    ) {
+        HorizontalDivider(
+            modifier = Modifier
+                .weight(1f), // Makes the divider take equal space on both sides
+            thickness = 1.dp,
+            color = Color.Gray.copy(alpha = 0.5f) // Light gray color
+        )
+
+        Text(
+            text = "Sign up with",
+            fontSize = 16.sp,
+            fontWeight = FontWeight.Bold,
+            color = Color.Gray,
+            modifier = Modifier.padding(horizontal = 8.dp) // Space around the text
+        )
+
+        HorizontalDivider(
+            modifier = Modifier
+                .weight(1f),
+            thickness = 1.dp,
+            color = Color.Gray.copy(alpha = 0.5f)
+        )
+    }
+}
+
+@Composable
+fun RegisterScreenTwo(onRegisterSuccess: () -> Unit,
+                      onLogin: () -> Unit) {
+    var password by remember { mutableStateOf("") }
+    var confirmPassword by remember { mutableStateOf("") }
+    val context = LocalContext.current
+    var passwordVisible by remember { mutableStateOf(false) }
+    var ConfirmedPasswordVisible by remember { mutableStateOf(false) }
+    var confirmPasswordVisible by remember { mutableStateOf(false) }
+    val visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation()
+    val visualTransformationConfirmed = if (confirmPasswordVisible) VisualTransformation.None else PasswordVisualTransformation()
+    val image = painterResource(id = R.drawable.header)
+    var isFocusedPassword by remember { mutableStateOf(false) }
+    var isFocusedConfirmedPassword by remember { mutableStateOf(false) }
+
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(top = 0.dp)
+    ) {
+        Image(
+            painter = image,
+            contentDescription = "top background",
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(280.dp),
+            contentScale = ContentScale.Crop,
+        )
+    }
+    Text(
+        text = "You are almost \nthere..",
+        modifier = Modifier.padding(top = 240.dp, start = 16.dp),
+        fontSize = 35.sp,
+        fontWeight = FontWeight.Bold,
+        color = Color.Black
+    )
+
+    Text(
+        text = "Please enter your password!",
+        modifier = Modifier.padding(top = 330.dp, start = 16.dp),
+        fontSize = 17.sp,
+        color = Color(0xFF5B5B5E)
+    )
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(top = 140.dp, start = 16.dp, end = 16.dp),
+        verticalArrangement = Arrangement.Center // Ensure it starts at the top
+    ) {
+            TextField(
             value = password,
             onValueChange = { password = it },
             visualTransformation = visualTransformation, // Apply the visual transformation based on visibility
@@ -203,20 +452,74 @@ fun RegisterScreen(
                 )
             }
         )
+        Spacer(modifier = Modifier.height(8.dp))
+        TextField(
+            value = confirmPassword,
+            onValueChange = { confirmPassword = it },
+            visualTransformation = visualTransformationConfirmed, // Apply the visual transformation based on visibility
+            trailingIcon = {
+                val icon = if (confirmPasswordVisible)
+                    painterResource(id = R.drawable.eye) // Your "eye-open" icon
+                else
+                    painterResource(id = R.drawable.hidden) // Your "eye-closed" icon
 
-
+                IconButton(onClick = {
+                    ConfirmedPasswordVisible = !ConfirmedPasswordVisible // Toggle visibility state
+                }, modifier = Modifier.size(24.dp)) {
+                    Icon(painter = icon, contentDescription = "Toggle password visibility")
+                }
+            },
+            keyboardOptions = KeyboardOptions(
+                keyboardType = KeyboardType.Password, // Use password keyboard
+                imeAction = ImeAction.Done // Action button in the keyboard
+            ),
+            modifier = Modifier
+                .fillMaxWidth()
+                .border(
+                    width = 1.dp,
+                    color = if (isFocusedConfirmedPassword) Color(0xFFFFB700) else Color(0xFFEEEEEE),
+                    shape = RoundedCornerShape(10.dp)
+                )
+                .onFocusChanged { focusState -> isFocusedConfirmedPassword = focusState.isFocused },
+            colors = TextFieldDefaults.colors(
+                focusedTextColor = Color.Black,
+                unfocusedTextColor = Color.Black,
+                focusedContainerColor = Color.White,
+                unfocusedContainerColor = Color.White,
+                focusedIndicatorColor = Color.Transparent,
+                unfocusedIndicatorColor = Color.Transparent
+            ),
+            placeholder = {
+                Text(
+                    text = "Confirm your password",
+                    color = Color.LightGray,
+                    fontSize = 16.sp
+                )
+            }
+        )
         Button(
             onClick = {
-                if (email.isNotEmpty() && password.isNotEmpty() && name.isNotEmpty()) {
-                    val sharedPrefs =
-                        context.getSharedPreferences("user_prefs", MODE_PRIVATE)
-                    sharedPrefs.edit()
-                        .putString("password", password)
-                        .putString("email", email)
-                        .putString("name", name)
-                        .apply()
-                    onRegisterSuccess()
-
+                if (password.isNotEmpty() && confirmPassword.isNotEmpty()) {
+                    if (password == confirmPassword) {
+                        val sharedPrefs =
+                            context.getSharedPreferences("user_prefs", MODE_PRIVATE)
+                        val email = sharedPrefs.getString("email", "")
+                        val name = sharedPrefs.getString("name", "")
+                        var phoneNumber = sharedPrefs.getString("phone", "")
+                        val registerRequest = email?.let {
+                            RegisterRequest(
+                                name = name,
+                                email = it,
+                                phoneNumber = phoneNumber,
+                                password = it
+                            )
+                        }
+                        // Call the register API
+                        // authModel.register(registerRequest)
+                        onRegisterSuccess()
+                    } else {
+                        Toast.makeText(context, "Passwords do not match", Toast.LENGTH_SHORT).show()
+                    }
                 } else {
                     Toast.makeText(context, "Please fill in all fields", Toast.LENGTH_SHORT)
                         .show()
@@ -233,7 +536,7 @@ fun RegisterScreen(
             ),
             shape = RoundedCornerShape(28.5.dp),
         ) {
-            Text(fontSize = 20.sp, text = "Sign Up", fontWeight = FontWeight.Bold)
+            Text(fontSize = 20.sp, text = "Next", fontWeight = FontWeight.Bold)
         }
         Spacer(modifier = Modifier.height(8.dp))
         Row(
@@ -257,7 +560,8 @@ fun RegisterScreen(
                 modifier = Modifier.clickable { onLogin() } // Clickable action for "Login"
             )
         }
-    }
+
+}
     Button(
         onClick = { /* Google sign up logique wela maembalich */ },
         modifier = Modifier
@@ -584,132 +888,6 @@ fun AuthScreen(
             thickness = 1.dp,
             color = Color.Gray.copy(alpha = 0.5f)
         )
-    }
-}
-
-@Composable
-fun AccountVerificationScreen(
-    onCodeSent: () -> Unit,
-    onBack: () -> Unit
-) {
-    var phoneNumber by remember { mutableStateOf("") }
-    val context = LocalContext.current
-
-    Box(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(top = 0.dp)
-    ) {
-        Image(
-            painter = painterResource(id = R.drawable.header),
-            contentDescription = "top background",
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(280.dp),
-            contentScale = ContentScale.Crop,
-        )
-    }
-
-    Text(
-        text = "Account \nVerification",
-        modifier = Modifier.padding(top = 240.dp, start = 16.dp),
-        fontSize = 35.sp,
-        fontWeight = FontWeight.Bold,
-        color = Color.Black
-    )
-
-    Text(
-        text = "Please enter your phone number. We will send you a verification code.",
-        modifier = Modifier.padding(top = 330.dp, start = 16.dp),
-        fontSize = 17.sp,
-        color = Color(0xFF5B5B5E)
-    )
-
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(top = 380.dp, start = 16.dp, end = 16.dp),
-        verticalArrangement = Arrangement.Top
-    ) {
-        var isFocused by remember { mutableStateOf(false) }
-
-        TextField(
-            value = phoneNumber,
-            onValueChange = {
-                    input ->
-                // regex to filter only numeric input
-                if (input.matches(Regex("^\\d*\$"))) {
-                    phoneNumber = input
-                }
-            },
-            modifier = Modifier
-                .fillMaxWidth()
-                .border(
-                    width = 1.dp,
-                    color = if (isFocused) Color(0xFFFFB700) else Color(0xFFEEEEEE),
-                    shape = RoundedCornerShape(10.dp)
-                )
-                .onFocusChanged { focusState -> isFocused = focusState.isFocused },
-            colors = TextFieldDefaults.colors(
-                focusedTextColor = Color.Black,
-                unfocusedTextColor = Color.Black,
-                focusedContainerColor = Color.White,
-                unfocusedContainerColor = Color.White,
-                focusedIndicatorColor = Color.Transparent,
-                unfocusedIndicatorColor = Color.Transparent
-            ),
-            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-            placeholder = {
-                Text(
-                    text = "Enter your phone number",
-                    color = Color.LightGray,
-                    fontSize = 16.sp
-                )
-            }
-        )
-
-        Spacer(modifier = Modifier.height(24.dp))
-
-        Button(
-            onClick = {
-                if (phoneNumber.isNotEmpty()) {
-                    // Here you would typically send the verification code
-                    Toast.makeText(context, "Verification code sent!", Toast.LENGTH_SHORT).show()
-                    onCodeSent()
-                }
-                else {
-                    Toast.makeText(context, "Please enter your phone number", Toast.LENGTH_SHORT).show()
-                }
-            },
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 60.dp)
-                .height(60.dp),
-            colors = ButtonDefaults.buttonColors(
-                containerColor = Color(0xFFFFB700),
-                contentColor = Color.White
-            ),
-            shape = RoundedCornerShape(28.5.dp)
-        ) {
-            Text(fontSize = 20.sp, text = "SEND CODE", fontWeight = FontWeight.Bold)
-        }
-
-        Spacer(modifier = Modifier.height(16.dp))
-
-        Row(
-            horizontalArrangement = Arrangement.Center,
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(top = 10.dp),
-        ) {
-            Text(
-                text = "Go Back",
-                fontSize = 18.sp,
-                color = Color(0xFFA9411D),
-                fontWeight = FontWeight.Bold,
-                modifier = Modifier.clickable { onBack() }
-            )
-        }
     }
 }
 
