@@ -20,7 +20,6 @@ object OrderManager {
                 status = "Pending",
                 deliveryAddress = "",
                 deliveryNotes = "",
-                deliveryLocation = null,
                 history = emptyList(),
                 createdAt = Date(),
                 updatedAt = Date()

@@ -24,6 +24,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.google.gson.Gson
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -55,6 +56,7 @@ class MainActivity : ComponentActivity() {
         var isLoggedIn by remember { mutableStateOf(sharedPrefs.getBoolean("isLoggedIn", false)) }
         val sharedImageName = 1
         val restaurantModel = ViewModelProvider(this)[RestaurantModel::class.java]
+        val authModel = ViewModelProvider(this)[AuthModel::class.java]
         val menuModel = ViewModelProvider(this)[MenuModel::class.java]
         val restaurants = remember { mutableStateOf<List<Restaurant>>(emptyList()) }
         val isLoading = remember { mutableStateOf(true) } // Pour indiquer que les données sont en cours de chargement
@@ -133,8 +135,17 @@ class MainActivity : ComponentActivity() {
             }
             composable("login") {
                 AuthScreen(
-                    onLoginSuccess = {
-                        sharedPrefs.edit().putBoolean("isLoggedIn", true).apply()
+                    onLoginSuccess = { user ->
+                        val userInfo = mapOf(
+                            "token" to user.token,
+                            "name" to user.name,
+                            "email" to user.email,
+                            "phoneNumber" to user.phoneNumber
+                        )
+                        val userJson = Gson().toJson(userInfo)
+                        sharedPrefs.edit().putBoolean("isLoggedIn", true)
+                            .putString("userInfo", userJson).apply()
+
                         isLoggedIn = true
                         navController.navigate("home") {
                             popUpTo("login") { inclusive = true }
@@ -145,7 +156,8 @@ class MainActivity : ComponentActivity() {
                             popUpTo("login") { inclusive = true }
                         }
                     },
-                    onForgotPassword = { navController.navigate("reset_password_email") }
+                    onForgotPassword = { navController.navigate("reset_password_email") },
+                    authModel = authModel
                 )
             }
             composable("home") {

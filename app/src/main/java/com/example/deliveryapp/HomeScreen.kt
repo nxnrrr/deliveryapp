@@ -2,6 +2,7 @@
 
 package com.example.deliveryapp
 
+import android.content.Context.MODE_PRIVATE
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -19,6 +20,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
@@ -26,12 +28,12 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
+import com.google.gson.Gson
 
 @Composable
 
 fun Acceuil(restaurantModel: RestaurantModel,navController:NavHostController) {
     val restaurants = restaurantModel.restaurants.value
-
 
     var searchText by remember { mutableStateOf("") }
 
@@ -42,6 +44,11 @@ fun Acceuil(restaurantModel: RestaurantModel,navController:NavHostController) {
     val mexican = restaurants.filter {"Mexican" in  it.cuisineType }
     val turkish = restaurants.filter {"Turkish" in  it.cuisineType  }
     val indian = restaurants.filter {"Indian" in  it.cuisineType  }
+    val context = LocalContext.current
+    val sharedPrefs = context.getSharedPreferences("user_prefs", MODE_PRIVATE)
+    val userJson = sharedPrefs.getString("userInfo", null)
+    val userInfo = if (userJson != null) Gson().fromJson(userJson, Map::class.java) else null
+    val name = userInfo?.get("name") as? String ?: "User"
 
     LaunchedEffect(true) {
         restaurantModel.getRestaurants()
@@ -80,7 +87,7 @@ fun Acceuil(restaurantModel: RestaurantModel,navController:NavHostController) {
                 ) {
                     // Greeting text
                     Text(
-                        text = "Hello, Nesrine",
+                        text = "Hello, $name",
                         fontFamily = FontFamily(
                             Font(R.font.regular) // Directly reference the font here
                         ),

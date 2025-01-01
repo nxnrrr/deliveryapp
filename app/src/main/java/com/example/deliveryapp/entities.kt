@@ -22,6 +22,7 @@ data class User(
     val verificationTokenExpiry: Date?,
     val resetPasswordToken: String?,
     val resetPasswordTokenExpiry: Date?,
+    var token: String,
     val createdAt: Date,
     val updatedAt: Date,
     val role: Role
@@ -76,7 +77,6 @@ data class Order(
     val status: String,
     val deliveryAddress: String,
     var deliveryNotes: String?,
-    val deliveryLocation: DeliveryLocation?,
     val history: List<OrderHistory>,
     val createdAt: Date,
     var updatedAt: Date
@@ -87,12 +87,6 @@ data class OrderItem(
     val itemId: String,
     val imageUrl: Int,
     var quantity: Int
-)
-
-// DeliveryLocation data class
-data class DeliveryLocation(
-    val latitude: Double,
-    val longitude: Double
 )
 
 // OrderHistory data class
@@ -122,4 +116,22 @@ data class Notification(
 )
 data class ReviewsResponse(
     val reviews: List<Review>
+)
+
+data class LoginRequest(
+    val email: String,
+    val password: String,
+)
+
+data class RegisterRequest(
+    val email: String,
+    val password: String,
+    val phoneNumber: String?,
+    val name: String?,
+)
+
+data class AuthResponse(
+    val status: String,
+    val data: User,
+    val message: String
 )

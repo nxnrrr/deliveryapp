@@ -28,6 +28,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -324,9 +325,10 @@ fun RegisterScreen(
 
 @Composable
 fun AuthScreen(
-    onLoginSuccess: () -> Unit,
+    onLoginSuccess: (user: User) -> Unit,
     onNoAccount: () -> Unit,
-    onForgotPassword: () -> Unit
+    onForgotPassword: () -> Unit,
+    authModel: AuthModel
 ) {
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
@@ -337,6 +339,15 @@ fun AuthScreen(
     // Toggle between hidden (PasswordVisualTransformation) and plain text
     val visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation()
     val image = painterResource(id = R.drawable.header)
+    val user by authModel.user
+    val isLoading by authModel.isLoading
+    LaunchedEffect(user) {
+        if (user != null) {
+            onLoginSuccess(user!!)
+        } else if (!authModel.isLoading.value && authModel.authErrorMessage.value.isNotEmpty()) {
+            Toast.makeText(context, "Login failed. Please check your credentials.", Toast.LENGTH_SHORT).show()
+        }
+    }
     Box(
         modifier = Modifier
             .fillMaxWidth()
@@ -464,11 +475,9 @@ fun AuthScreen(
                     context.getSharedPreferences("user_prefs", MODE_PRIVATE)
                 val savedEmail = sharedPrefs.getString("email", "")
                 val savedPassword = sharedPrefs.getString("password", "")
-                if (email == savedEmail && password == savedPassword) {
-                    onLoginSuccess()
-                } else {
-                    Toast.makeText(context, "Invalid credentials", Toast.LENGTH_SHORT).show()
-                }
+                val loginRequest = LoginRequest(email = email, password = password)
+                authModel.login(loginRequest)
+
             },
             modifier = Modifier
                 .fillMaxWidth()
@@ -484,7 +493,7 @@ fun AuthScreen(
             shape = RoundedCornerShape(28.5.dp),
 
             ) {
-            Text(fontSize = 20.sp, text = "Sign in", fontWeight = FontWeight.Bold)
+            Text(fontSize = 20.sp, text = if (isLoading) "Signing In..." else "Sign in", fontWeight = FontWeight.Bold)
         }
         Spacer(modifier = Modifier.height(8.dp))
 

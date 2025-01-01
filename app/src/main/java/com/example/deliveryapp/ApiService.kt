@@ -1,8 +1,9 @@
 package com.example.deliveryapp
 
-import retrofit2.Call
 import retrofit2.Response
+import retrofit2.http.Body
 import retrofit2.http.GET
+import retrofit2.http.POST
 import retrofit2.http.Path
 import retrofit2.http.Query
 
@@ -19,6 +20,22 @@ interface ApiService {
     suspend fun getReview(@Path("restaurantId") restaurantId: String): Response<ReviewsResponse>
     @GET("menuid/{menuId}")
     suspend fun getMenubyId(@Path("menuId") menuId: String): Response<MenuItem>
+    @POST("auth/login")
+    suspend fun login(@Body loginRequest: LoginRequest): Response<AuthResponse>
 
+//    @POST("auth/register")
+//    suspend fun register(@Body registerRequest: AuthRequest): Response<AuthResponse>
+//
+//    @GET("auth")
+//    suspend fun checkAuth(): Response<AuthResponse>
+//
+//    @GET("auth/verify/{token}")
+//    suspend fun verifyAccount(@Path("token") token: String): Response<AuthResponse>
+//
+//    @POST("auth/password/reset")
+//    suspend fun requestPasswordReset(@Body resetRequest: PasswordResetRequest): Response<AuthResponse>
+//
+//    @POST("auth/password/reset/{token}")
+//    suspend fun resetPassword(@Path("token") token: String, @Body newPassword: PasswordResetConfirmRequest): Response<AuthResponse>
 
 }
