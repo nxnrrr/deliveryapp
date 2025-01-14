@@ -71,11 +71,6 @@ class MainActivity : ComponentActivity() {
                 SplashScreenOne(onNext = { navController.navigate("splash_two") },
                     onSkip = { navController.navigate("login") })
             }
-            composable("tracking") {
-                TrackingScreen(
-                    onBackPress = { navController.popBackStack() }
-                )
-            }
             composable("splash_two") {
                 SplashScreenTwo(onNext = { navController.navigate("splash_three") })
             }
@@ -107,16 +102,7 @@ class MainActivity : ComponentActivity() {
                     }
                 )
             }
-//            composable("account_verification") {
-//                AccountVerificationScreen(
-//                    onCodeSent = { navController.navigate("verification_code") },
-//                    onBack = {
-//                        navController.navigate("register") {
-//                            popUpTo("register_step_two") { inclusive = true }
-//                        }
-//                    }
-//                )
-//            }
+
             composable("verification_code") {
                 VerificationCodeScreen(
                     onVerificationSuccess = {
@@ -148,6 +134,30 @@ class MainActivity : ComponentActivity() {
                     }
                 )
             }
+
+            composable("home") {
+                Acceuil(
+                    restaurantModel = restaurantModel,
+                    navController = navController,
+                    onProfile = { navController.navigate("profile") },
+                    onLogOut = {
+                        sharedPrefs.edit()
+                            .putBoolean("isLoggedIn", false)
+                            .apply()
+                        isLoggedIn = false
+                        navController.navigate("login") {
+                            popUpTo("home") { inclusive = true }
+                        }
+                    }
+                )
+            }
+
+            composable("profile") {
+                ProfileScreen(
+                    onBack = { navController.popBackStack() }
+                )
+            }
+
             composable("login") {
                 AuthScreen(
                     onLoginSuccess = { user ->
@@ -174,10 +184,6 @@ class MainActivity : ComponentActivity() {
                     onForgotPassword = { navController.navigate("reset_password_email") },
                     authModel = authModel
                 )
-            }
-            composable("home") {
-                Acceuil(restaurantModel, navController)
-
             }
             composable("reset_password_email") {
                 ResetPasswordEmailScreen(
@@ -231,6 +237,11 @@ class MainActivity : ComponentActivity() {
 
                 // Now you can pass these arguments to the FoodOrderScreen
                 //FoodOrderScreen(navController)
+            }
+            composable("tracking") {
+                TrackingScreen(
+                    onBackPress = { navController.popBackStack() }
+                )
             }
         }
 

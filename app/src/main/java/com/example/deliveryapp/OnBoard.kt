@@ -38,7 +38,7 @@ fun SplashScreenOne( onNext: () -> Unit,
     ) {
         // Image principale
         Image(
-            painter = painterResource(id = R.drawable.img1),
+            painter = painterResource(id = R.drawable.illustration1),
             contentDescription = "Illustration",
             modifier = Modifier
                 .size(600.dp) // Taille ajustée

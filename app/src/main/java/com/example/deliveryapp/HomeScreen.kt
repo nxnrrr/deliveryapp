@@ -30,20 +30,187 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.google.gson.Gson
 
+//@Composable
+//
+//fun Acceuil(restaurantModel: RestaurantModel,navController:NavHostController, onProfile: () -> Unit, onLogOut: () -> Unit) {
+//    val restaurants = restaurantModel.restaurants.value
+//
+//    var searchText by remember { mutableStateOf("") }
+//
+//    val italiens = restaurants.filter { "Italian" in  it.cuisineType }
+//    val traditionnal = restaurants.filter {"Traditionnal" in  it.cuisineType }
+//    val fastFood = restaurants.filter {"Fast" in  it.cuisineType  }
+//    val asian = restaurants.filter { "Asian" in  it.cuisineType }
+//    val mexican = restaurants.filter {"Mexican" in  it.cuisineType }
+//    val turkish = restaurants.filter {"Turkish" in  it.cuisineType  }
+//    val indian = restaurants.filter {"Indian" in  it.cuisineType  }
+//    val context = LocalContext.current
+//    val sharedPrefs = context.getSharedPreferences("user_prefs", MODE_PRIVATE)
+//    val userJson = sharedPrefs.getString("userInfo", null)
+//    val userInfo = if (userJson != null) Gson().fromJson(userJson, Map::class.java) else null
+//    val name = userInfo?.get("name") as? String ?: "User"
+//
+//    LaunchedEffect(true) {
+//        restaurantModel.getRestaurants()
+//    }
+//
+//
+//    val data = listOf(
+//        "ITALIAN" to italiens,
+//        "TRADITIONNAL" to traditionnal,
+//        "FAST FOOD" to fastFood,
+//        "ASIAN" to asian,
+//        "MEXICAN" to mexican,
+//        "TURKISH" to turkish,
+//        "INDIAN" to indian
+//    ).filter { it.second.isNotEmpty() }
+//
+//
+//
+//
+//    Box(
+//        modifier = Modifier
+//            .fillMaxSize()
+//            .background(Color(0xFFFFF8E1)) // Light background color
+//            .padding(top=50.dp,start = 10.dp, end = 0.dp)
+//    ) {
+//        Column() {
+//            Row(
+//                modifier = Modifier.fillMaxWidth(),
+//                verticalAlignment = Alignment.Top // Aligns the text and image to the top
+//            ) {
+//                // Text content on the left half
+//                Column(
+//                    modifier = Modifier
+//                        .weight(1f) // Takes up half of the Row
+//                        .padding(end = 16.dp) // Space between text and image
+//                ) {
+//                    // Greeting text
+//                    Text(
+//                        text = "Hello, $name",
+//                        fontFamily = FontFamily(
+//                            Font(R.font.regular) // Directly reference the font here
+//                        ),
+//                        fontSize = 18.sp,
+//                        color = Color(0xFF383838)
+//                    )
+//
+//                    Spacer(modifier = Modifier.height(8.dp))
+//
+//                    // Main question text, each line in a separate Text composable
+//                    Text(
+//                        text = "What do you",
+//                        fontFamily = FontFamily(
+//                            Font(R.font.bold) // Directly reference the font here
+//                        ),
+//                        fontSize = 32.sp,
+//                        fontWeight = FontWeight.Bold,
+//                        color = Color(0xFF3E2C0F)
+//                    )
+//                    Text(
+//                        text = "want to eat",
+//                        fontFamily = FontFamily(
+//                            Font(R.font.bold) // Directly reference the font here
+//                        ),
+//                        fontSize = 32.sp,
+//                        fontWeight = FontWeight.Bold,
+//                        color = Color(0xFF3E2C0F)
+//                    )
+//                    Text(
+//                        text = "today?",
+//                        fontFamily = FontFamily(
+//                            Font(R.font.bold) // Directly reference the font here
+//                        ),
+//                        fontSize = 32.sp,
+//                        fontWeight = FontWeight.Bold,
+//                        color = Color(0xFF3E2C0F)
+//                    )
+//                }
+//
+//                // Profile image on the right half, in a circular shape
+//                Image(
+//                    painter = painterResource(id = R.drawable.img1), // Replace with your image resource
+//                    contentDescription = "Profile Image",
+//                    contentScale = ContentScale.Crop,
+//                    modifier = Modifier
+//                        .size(80.dp) // Size of the image
+//                        .clip(CircleShape) // Makes the image circular
+//                        .align(Alignment.Top) // Aligns the image to the top of the Row
+//                )
+//
+//            }
+//
+//            OutlinedTextField(
+//                value = searchText,
+//                onValueChange = { searchText = it },
+//                placeholder = { Text("Search menu, restaurant or etc") },
+//                leadingIcon = {
+//                    Icon(
+//                        painter = painterResource(id = R.drawable.search),
+//                        contentDescription = "Search Icon",
+//                        tint = Color.Gray,
+//                        modifier = Modifier.clickable {
+//                            navController.navigate(("restaurant_list?searchText=$searchText"))
+//                        }
+//                    )
+//                },
+//                modifier = Modifier
+//                    .fillMaxWidth()
+//                    .padding(top = 16.dp)
+//                    .height(56.dp),
+//                shape = RoundedCornerShape(24.dp),
+//                singleLine = true,
+//                colors = TextFieldDefaults.colors()
+//            )
+//
+//            Spacer(modifier = Modifier.height(15
+//                .dp))
+//            LazyColumn (
+//                modifier = Modifier.fillMaxSize(),
+//                verticalArrangement = Arrangement.spacedBy(16.dp),
+//                contentPadding = PaddingValues(0.dp)
+//            ) {
+//
+//                items(data) { (title, items) ->
+//                    Column(modifier = Modifier.padding(bottom = 16.dp)) {
+//
+//                        Text(
+//                            text = title,
+//                            fontFamily = FontFamily(
+//                                Font(R.font.meduim) // Directly reference the font here
+//                            ),
+//                        )
+//
+//
+//
+//                        LazyRow(
+//                            modifier = Modifier
+//                                .fillMaxWidth()
+//
+//                        ) {
+//                            items(items) { item ->
+//                                RestaurantItem(item, navController)
+//
+//                                }
+//                            }
+//                        }
+//                    }
+//                }}}}
+
 @Composable
-
-fun Acceuil(restaurantModel: RestaurantModel,navController:NavHostController) {
+fun Acceuil(restaurantModel: RestaurantModel, navController: NavHostController, onProfile: () -> Unit, onLogOut: () -> Unit) {
     val restaurants = restaurantModel.restaurants.value
-
     var searchText by remember { mutableStateOf("") }
+    var showMenu by remember { mutableStateOf(false) }
 
-    val italiens = restaurants.filter { "Italian" in  it.cuisineType }
-    val traditionnal = restaurants.filter {"Traditionnal" in  it.cuisineType }
-    val fastFood = restaurants.filter {"Fast" in  it.cuisineType  }
-    val asian = restaurants.filter { "Asian" in  it.cuisineType }
-    val mexican = restaurants.filter {"Mexican" in  it.cuisineType }
-    val turkish = restaurants.filter {"Turkish" in  it.cuisineType  }
-    val indian = restaurants.filter {"Indian" in  it.cuisineType  }
+    val italiens = restaurants.filter { "Italian" in it.cuisineType }
+    val traditionnal = restaurants.filter { "Traditionnal" in it.cuisineType }
+    val fastFood = restaurants.filter { "Fast" in it.cuisineType }
+    val asian = restaurants.filter { "Asian" in it.cuisineType }
+    val mexican = restaurants.filter { "Mexican" in it.cuisineType }
+    val turkish = restaurants.filter { "Turkish" in it.cuisineType }
+    val indian = restaurants.filter { "Indian" in it.cuisineType }
+
     val context = LocalContext.current
     val sharedPrefs = context.getSharedPreferences("user_prefs", MODE_PRIVATE)
     val userJson = sharedPrefs.getString("userInfo", null)
@@ -53,7 +220,6 @@ fun Acceuil(restaurantModel: RestaurantModel,navController:NavHostController) {
     LaunchedEffect(true) {
         restaurantModel.getRestaurants()
     }
-
 
     val data = listOf(
         "ITALIAN" to italiens,
@@ -65,79 +231,85 @@ fun Acceuil(restaurantModel: RestaurantModel,navController:NavHostController) {
         "INDIAN" to indian
     ).filter { it.second.isNotEmpty() }
 
-
-
-
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color(0xFFFFF8E1)) // Light background color
-            .padding(top=50.dp,start = 10.dp, end = 0.dp)
+            .background(Color(0xFFFFF8E1))
+            .padding(top = 50.dp, start = 10.dp, end = 0.dp)
     ) {
-        Column() {
+        Column {
             Row(
                 modifier = Modifier.fillMaxWidth(),
-                verticalAlignment = Alignment.Top // Aligns the text and image to the top
+                verticalAlignment = Alignment.Top
             ) {
-                // Text content on the left half
                 Column(
                     modifier = Modifier
-                        .weight(1f) // Takes up half of the Row
-                        .padding(end = 16.dp) // Space between text and image
+                        .weight(1f)
+                        .padding(end = 16.dp)
                 ) {
-                    // Greeting text
                     Text(
                         text = "Hello, $name",
-                        fontFamily = FontFamily(
-                            Font(R.font.regular) // Directly reference the font here
-                        ),
+                        fontFamily = FontFamily(Font(R.font.regular)),
                         fontSize = 18.sp,
                         color = Color(0xFF383838)
                     )
 
                     Spacer(modifier = Modifier.height(8.dp))
 
-                    // Main question text, each line in a separate Text composable
                     Text(
                         text = "What do you",
-                        fontFamily = FontFamily(
-                            Font(R.font.bold) // Directly reference the font here
-                        ),
+                        fontFamily = FontFamily(Font(R.font.bold)),
                         fontSize = 32.sp,
                         fontWeight = FontWeight.Bold,
                         color = Color(0xFF3E2C0F)
                     )
                     Text(
                         text = "want to eat",
-                        fontFamily = FontFamily(
-                            Font(R.font.bold) // Directly reference the font here
-                        ),
+                        fontFamily = FontFamily(Font(R.font.bold)),
                         fontSize = 32.sp,
                         fontWeight = FontWeight.Bold,
                         color = Color(0xFF3E2C0F)
                     )
                     Text(
                         text = "today?",
-                        fontFamily = FontFamily(
-                            Font(R.font.bold) // Directly reference the font here
-                        ),
+                        fontFamily = FontFamily(Font(R.font.bold)),
                         fontSize = 32.sp,
                         fontWeight = FontWeight.Bold,
                         color = Color(0xFF3E2C0F)
                     )
                 }
 
-                // Profile image on the right half, in a circular shape
-                Image(
-                    painter = painterResource(id = R.drawable.img1), // Replace with your image resource
-                    contentDescription = "Profile Image",
-                    contentScale = ContentScale.Crop,
-                    modifier = Modifier
-                        .size(80.dp) // Size of the image
-                        .clip(CircleShape) // Makes the image circular
-                        .align(Alignment.Top) // Aligns the image to the top of the Row
-                )
+                Box {
+                    Image(
+                        painter = painterResource(id = R.drawable.img1),
+                        contentDescription = "Profile Image",
+                        contentScale = ContentScale.Crop,
+                        modifier = Modifier
+                            .size(80.dp)
+                            .clip(CircleShape)
+                            .clickable { showMenu = true }
+                    )
 
+                    DropdownMenu(
+                        expanded = showMenu,
+                        onDismissRequest = { showMenu = false }
+                    ) {
+                        DropdownMenuItem(
+                            text = { Text("Edit your profile") },
+                            onClick = {
+                                onProfile()
+                                showMenu = false
+                            }
+                        )
+                        DropdownMenuItem(
+                            text = { Text("Logout") },
+                            onClick = {
+                                onLogOut()
+                                showMenu = false
+                            }
+                        )
+                    }
+                }
             }
 
             OutlinedTextField(
@@ -163,39 +335,33 @@ fun Acceuil(restaurantModel: RestaurantModel,navController:NavHostController) {
                 colors = TextFieldDefaults.colors()
             )
 
-            Spacer(modifier = Modifier.height(15
-                .dp))
-            LazyColumn (
+            Spacer(modifier = Modifier.height(15.dp))
+
+            LazyColumn(
                 modifier = Modifier.fillMaxSize(),
                 verticalArrangement = Arrangement.spacedBy(16.dp),
                 contentPadding = PaddingValues(0.dp)
             ) {
-
                 items(data) { (title, items) ->
                     Column(modifier = Modifier.padding(bottom = 16.dp)) {
-
                         Text(
                             text = title,
-                            fontFamily = FontFamily(
-                                Font(R.font.meduim) // Directly reference the font here
-                            ),
+                            fontFamily = FontFamily(Font(R.font.meduim))
                         )
 
-
-
                         LazyRow(
-                            modifier = Modifier
-                                .fillMaxWidth()
-
+                            modifier = Modifier.fillMaxWidth()
                         ) {
                             items(items) { item ->
                                 RestaurantItem(item, navController)
-
-                                }
                             }
                         }
                     }
-                }}}}
+                }
+            }
+        }
+    }
+}
 
 @Composable
 fun FilterButtons(filters: List<String>, selectedFilters: Set<String>, onFilterChange: (String) -> Unit) {
