@@ -28,6 +28,7 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -57,16 +58,16 @@ import com.example.deliveryapp.ui.theme.Montserrat
 import java.text.SimpleDateFormat
 
 @Composable
-fun MenuListScreen(restaurantModel: RestaurantModel,menuModel: MenuModel,navController: NavHostController, restaurantId: String) {
-
+fun MenuListScreen(restaurantModel: RestaurantModel, menuModel: MenuModel, navController: NavHostController, restaurantId: String) {
     val menuItems = menuModel.menu.value
     val restaurant = restaurantModel.resto
     val reviews1 = restaurantModel.reviews.value
+    val isLoading = menuModel.isLoading.value // Add this line
     var isClicked = remember { mutableStateOf(true) }
     var isClicked2 = remember { mutableStateOf(false) }
     var isClicked3 = remember { mutableStateOf(false) }
-    var rating = remember { mutableStateOf(4)}
-    var reviewText =  remember { mutableStateOf("") }
+    var rating = remember { mutableStateOf(4) }
+    var reviewText = remember { mutableStateOf("") }
 
     LaunchedEffect(true) {
         restaurantModel.getRestaurantById(restaurantId)
@@ -76,24 +77,19 @@ fun MenuListScreen(restaurantModel: RestaurantModel,menuModel: MenuModel,navCont
         restaurantModel.getReviewByResto(restaurantId)
     }
 
-
-
     LaunchedEffect(true) {
         menuModel.menu.value = emptyList()
         menuModel.getMenu(restaurantId)
     }
 
-    Column (modifier = Modifier
-        .fillMaxWidth()
-        .background(Color(0xFFFFF8E1))
-    )
-
-    {
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .background(Color(0xFFFFF8E1))
+    ) {
         Box(modifier = Modifier
             .fillMaxWidth()
-
-            .fillMaxHeight(0.35f))
-        {
+            .fillMaxHeight(0.35f)) {
             Image(
                 painter = painterResource(id = R.drawable.asi),
                 contentDescription = "Restaurant image",
@@ -118,7 +114,7 @@ fun MenuListScreen(restaurantModel: RestaurantModel,menuModel: MenuModel,navCont
             Column(modifier = Modifier
                 .padding(horizontal = 20.dp, vertical = 70.dp)) {
                 Text(
-                    text = restaurant?.name ?: "Nom du restaurant non disponible",
+                    text = restaurantModel.resto.value?.name ?: "Nom du restaurant non disponible",
                     style = MaterialTheme.typography.titleMedium.copy(
                         fontFamily = Montserrat,
                         fontWeight = FontWeight.Bold,
@@ -137,11 +133,10 @@ fun MenuListScreen(restaurantModel: RestaurantModel,menuModel: MenuModel,navCont
                     )
                     Spacer(modifier = Modifier.width(2.dp))
                     Text(
-                        text =  restaurant?.name ?: "Localisation du restaurant non disponible",
+                        text =  restaurantModel.resto.value?.name ?: "Localisation du restaurant non disponible",
                         style = MaterialTheme.typography.titleMedium.copy(
                             fontFamily = Montserrat,
                             fontWeight = FontWeight.Medium,
-
                             fontSize = 18.sp,
                             color = Color.White
                         )
@@ -152,7 +147,6 @@ fun MenuListScreen(restaurantModel: RestaurantModel,menuModel: MenuModel,navCont
                 modifier = Modifier
                     .fillMaxWidth()
                     .align(Alignment.BottomCenter)
-
                     .padding(16.dp), // Optional padding
                 horizontalArrangement = Arrangement.Center
             ) {
@@ -241,29 +235,69 @@ fun MenuListScreen(restaurantModel: RestaurantModel,menuModel: MenuModel,navCont
             }
         }
 
-
-        if (isClicked.value == true) {
+        if (isClicked.value) {
             Spacer(modifier = Modifier.height(12.dp))
-
-            LazyColumn {
-
-                items(menuItems) { menuItem ->
-                    MenuCard(navController,menuItem) {
+            
+            if (isLoading) {
+                // Loading state
+                Column(
+                    modifier = Modifier.fillMaxSize(),
+                    verticalArrangement = Arrangement.Center,
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    CircularProgressIndicator(
+                        color = Color(0xFFFFB700),
+                        modifier = Modifier.size(50.dp)
+                    )
+                    Spacer(modifier = Modifier.height(16.dp))
+                    Text(
+                        text = "Loading menu items...",
+                        fontSize = 18.sp,
+                        color = Color(0xFF383838)
+                    )
+                }
+            } else {
+                LazyColumn {
+                    items(menuItems) { menuItem ->
+                        MenuCard(navController, menuItem) {}
                     }
                 }
             }
         }
-        if (isClicked2.value == true){
+        
+        if (isClicked2.value == true) {
             Spacer(modifier = Modifier.height(12.dp))
-            LazyColumn(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.spacedBy(8.dp)
-            ) {
-                items(reviews1) { review ->
-                    ReviewItem(review)
+            if (restaurantModel.isLoading.value) {
+                // Loading state for reviews
+                Column(
+                    modifier = Modifier.fillMaxSize(),
+                    verticalArrangement = Arrangement.Center,
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    CircularProgressIndicator(
+                        color = Color(0xFFFFB700),
+                        modifier = Modifier.size(50.dp)
+                    )
+                    Spacer(modifier = Modifier.height(16.dp))
+                    Text(
+                        text = "Loading reviews...",
+                        fontSize = 18.sp,
+                        color = Color(0xFF383838)
+                    )
                 }
-            }}
+            } else {
+                LazyColumn(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.spacedBy(8.dp)
+                ) {
+                    items(reviews1) { review ->
+                        ReviewItem(review)
+                    }
+                }
+            }
+        }
+        
         if (isClicked3.value == true){
             Column(
                 modifier = Modifier
@@ -319,7 +353,6 @@ fun MenuListScreen(restaurantModel: RestaurantModel,menuModel: MenuModel,navCont
                         fontFamily = FontFamily(Font(R.font.meduim))
                     )
 
-
                     Spacer(modifier = Modifier.height(16.dp))
 
                     OutlinedTextField(
@@ -332,8 +365,6 @@ fun MenuListScreen(restaurantModel: RestaurantModel,menuModel: MenuModel,navCont
                         maxLines = 5,
                         placeholder = { Text("Your review") },
                         colors = TextFieldDefaults.colors(focusedContainerColor = Color.White, unfocusedContainerColor = Color.White, ))
-
-
 
                     Spacer(modifier = Modifier.height(20.dp))
 
@@ -384,7 +415,6 @@ fun ReviewItem(review: Review) {
                     contentScale = ContentScale.Crop
                 )
 
-
                 Box(
                     modifier = Modifier
                         .size(18.dp)
@@ -401,9 +431,7 @@ fun ReviewItem(review: Review) {
                 }
             }
 
-
             Spacer(modifier = Modifier.width(10.dp))
-
 
             Column(
 
@@ -423,7 +451,6 @@ fun ReviewItem(review: Review) {
                 )
             }
         }
-
 
         Spacer(modifier = Modifier.height(4.dp))
         Row(

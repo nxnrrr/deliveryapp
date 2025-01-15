@@ -2,6 +2,7 @@ package com.example.deliveryapp
 
 import android.util.Log
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
@@ -12,6 +13,7 @@ class AuthModel: ViewModel() {
     val isLoggedIn = mutableStateOf(false)
     val authErrorMessage = mutableStateOf("")
     val user = mutableStateOf<User?>(null)
+    private val _authResponse = mutableStateOf<AuthResponse?>(null)
 
     fun login(loginRequest: LoginRequest) {
         viewModelScope.launch {
@@ -26,6 +28,7 @@ class AuthModel: ViewModel() {
                     if (authResponse != null) {
                         isLoggedIn.value = true
                         user.value = authResponse.data
+                        _authResponse.value = authResponse
                         Log.d("AuthModel", "Login successful: ${authResponse.data}")
                     } else {
                         Log.e("AuthModel", "Login failed: Empty response body")

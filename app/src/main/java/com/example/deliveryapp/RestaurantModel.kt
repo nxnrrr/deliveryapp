@@ -16,25 +16,27 @@ class RestaurantModel: ViewModel() {
 
     val restaurants = mutableStateOf<List<Restaurant>>(emptyList())
     val cc = mutableStateOf<List<Restaurant>>(emptyList())
-    val isLoading =  mutableStateOf(true)
-    var resto: Restaurant? = null
+    val isLoading =  mutableStateOf(false)
+    val resto = mutableStateOf<Restaurant?>(null)
     val reviews = mutableStateOf<List<Review>>(emptyList())
 
-
-
     fun getRestaurants(){
-
+        isLoading.value = true // Set loading to true when starting
         viewModelScope.launch {
-            val response = RetrofitClient.api.getRestaurants()
-            if (response.isSuccessful) {
-                restaurants.value = response.body()!!
-            }
-            else{
+            try {
+                val response = RetrofitClient.api.getRestaurants()
+                if (response.isSuccessful) {
+                    restaurants.value = response.body()!!
+                }
+                else{
 
+                }
+            } catch (e: Exception) {
+                // Handle error
+            } finally {
+                isLoading.value = false // Set loading to false when done
             }
-
         }
-
     }
 
     // Dans votre ViewModel
@@ -74,7 +76,7 @@ class RestaurantModel: ViewModel() {
 
                 if (response.isSuccessful && response.body() != null) {
                     // Si la réponse est réussie, stocker le restaurant dans la variable
-                    resto = response.body()
+                    resto.value = response.body()
                     Log.d("RestaurantSearch", "Restaurant récupéré avec succès: ${resto}")
                 } else {
                     // Si la réponse n'est pas réussie, enregistrer l'erreur
@@ -116,11 +118,6 @@ class RestaurantModel: ViewModel() {
             }
         }
     }
-
-
-
-
-
 }
 
 

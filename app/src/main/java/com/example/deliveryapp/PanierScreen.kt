@@ -11,6 +11,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
@@ -20,15 +21,24 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.example.deliveryapp.ui.theme.Montserrat
 import java.text.DecimalFormat
-/*
+
 @Composable
 fun FoodOrderScreen(navController: NavHostController) {
-    val order = OrderManager.getCurrentOrder()
-    var totalAmount = DecimalFormat("#.##").format(order.totalAmount).toDouble()
-    val subTotal = totalAmount
+    val context = LocalContext.current
+    var orders by remember { mutableStateOf(OrderManager.getCartItems(context)) }
+
+    // Calculate totals based on current orders
+    val totalPriceNet = orders.sumOf { (it.price * it.quantity).toDouble() }
+    val subTotal = DecimalFormat("#.##").format(totalPriceNet).toDouble()
     val taxesFees = 10.0
     val deliveryFee = 5.0
-    var totalPrice = subTotal + taxesFees + deliveryFee
+    val totalPrice = subTotal + taxesFees + deliveryFee
+
+    // Effect to update orders when SharedPreferences changes
+    LaunchedEffect(Unit) {
+        // You could set up a Flow here to observe SharedPreferences changes
+        orders = OrderManager.getCartItems(context)
+    }
 
 
     Column(
@@ -56,20 +66,17 @@ fun FoodOrderScreen(navController: NavHostController) {
             modifier = Modifier.fillMaxWidth(),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            order.items.forEach { item ->
+            orders.forEach { item ->
                  // Use remembered state for quantity
                 FoodCard(
                     orderItem = item,
-
-                    price = OrderManager.getItemPrice(item.itemId, order.restaurantId),
+                    price = item.price,
                     total = totalPrice,
                     onQuantityChange = { id, delta ->
-
-                        val newQuantity = item.quantity + delta
-                        order.totalAmount = order.totalAmount - OrderManager.getItemPrice(item.itemId, order.restaurantId) * item.quantity + OrderManager.getItemPrice(item.itemId, order.restaurantId) * newQuantity
-                        item.quantity = newQuantity
-                        var prix = OrderManager.getItemPrice(item.itemId, order.restaurantId)* item.quantity
-                        totalAmount += prix
+                        // Update SharedPreferences
+                        OrderManager.updateItemQuantity(id, delta, context)
+                        // Update local state
+                        orders = OrderManager.getCartItems(context)
                     }
                 )
             }
@@ -97,19 +104,45 @@ fun FoodOrderScreen(navController: NavHostController) {
                 )
             }
         }
+
+        Spacer(modifier = Modifier.height(16.dp))
+
+        Box(
+            modifier = Modifier.fillMaxWidth(),
+            contentAlignment = Alignment.Center
+        ) {
+            Button(
+                onClick = {
+                    navController.navigate("home")
+                },
+                modifier = Modifier
+                    .width(300.dp)
+                    .height(50.dp),
+                colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFA9411D))
+            ) {
+                Text(
+                    text = "Continuer vos achats",
+                    color = Color.White,
+                    fontSize = 16.sp,
+                    fontFamily = FontFamily(Font(R.font.bold))
+                )
+            }
+        }
     }
 }
 
 
 @Composable
-fun FoodCard(orderItem: OrderItem,total: Double, price: Float, onQuantityChange: (String, Int) -> Unit) {
+fun FoodCard(orderItem: OrderItem,
+             total: Double,
+             price: Float,
+             onQuantityChange: (String, Int) -> Unit) {
+    val context = LocalContext.current
     var quantity by remember { mutableStateOf(orderItem.quantity) }
-    val order = OrderManager.getCurrentOrder()
-    val totalAmount = DecimalFormat("#.##").format(order.totalAmount).toDouble()
-    var subTotal = totalAmount
-    val taxesFees = 10.0
-    val deliveryFee = 5.0
-    var totalPrice = subTotal + taxesFees + deliveryFee
+
+    LaunchedEffect(orderItem.quantity) {
+        quantity = orderItem.quantity
+    }
 
     Card(
     modifier = Modifier
@@ -150,12 +183,12 @@ fun FoodCard(orderItem: OrderItem,total: Double, price: Float, onQuantityChange:
                 verticalArrangement = Arrangement.SpaceBetween
             ) {
                 Text(
-                    text = orderItem.itemId,
+                    text = orderItem.name,
                     fontSize = 13.sp,
                     fontFamily = FontFamily(Font(R.font.meduim))
                 )
                 Text(
-                    text = "${orderItem.quantity} DZ",
+                    text = "${orderItem.price} DZ",
                     fontSize = 14.sp,
                     color = Color.Gray,
                     fontFamily = FontFamily(Font(R.font.meduim))
@@ -164,8 +197,12 @@ fun FoodCard(orderItem: OrderItem,total: Double, price: Float, onQuantityChange:
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     Spacer(modifier = Modifier.width(8.dp))
                     Button(
-                        onClick = { if (quantity>0) quantity--
-                            onQuantityChange(orderItem.itemId, -1) },
+                        onClick = {
+                            if (quantity > 0) {
+                                onQuantityChange(orderItem.itemId, -1)
+                                quantity--
+                            }
+                        },
                         colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFFDDB6F))
                     ) {
                         Text(
@@ -185,12 +222,10 @@ fun FoodCard(orderItem: OrderItem,total: Double, price: Float, onQuantityChange:
 
                     Button(
                         onClick = {
-                            quantity++ // Increment quantity
-                             // Add only the item's price to totalPrice
-                            onQuantityChange(orderItem.itemId, 1) // Call the quantity change callback
+                            onQuantityChange(orderItem.itemId, 1)
+                            quantity++
                         },
-
-                                colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFFDDB6F))
+                        colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFFDDB6F))
                     ) {
                         Text(
                             text = "+",
@@ -203,7 +238,7 @@ fun FoodCard(orderItem: OrderItem,total: Double, price: Float, onQuantityChange:
                     }
                 }
                 Text(
-                    text = "Price: ${String.format("%.2f", price)} DZ",
+                    text = "Total: ${String.format("%.2f", price * quantity)} DZ",
                     fontSize = 14.sp,
                     color = Color(0xFFA9411D),
                     fontFamily = FontFamily(Font(R.font.meduim))
@@ -253,4 +288,3 @@ fun SummaryRow(label: String, amount: Double, isBold: Boolean = false) {
         )
     }
 }
-*/

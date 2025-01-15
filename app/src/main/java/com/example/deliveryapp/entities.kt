@@ -85,8 +85,17 @@ data class Order(
 // OrderItem data class
 data class OrderItem(
     val itemId: String,
+    val name: String,
+    val restaurantId: String,
     val imageUrl: Int,
-    var quantity: Int
+    var quantity: Int,
+    var price: Float,
+)
+
+data class CartItem(
+    val itemId: String,
+    val quantity: Int,
+    val price: Float,
 )
 
 // OrderHistory data class

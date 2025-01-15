@@ -29,6 +29,7 @@ import com.google.gson.Gson
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        RetrofitClient.initialize(this)
         enableEdgeToEdge()
         setContent {
             Box(
@@ -231,12 +232,12 @@ class MainActivity : ComponentActivity() {
                 val menuId = backStackEntry.arguments?.getString("menuId") ?: ""
                 MenuDetailScreen(menuModel,navController, menuId)
             }
-            composable("panier2/{orderId}/{note}") { backStackEntry ->
+            composable("panier") { backStackEntry ->
                 val orderId = backStackEntry.arguments?.getString("orderId") ?: ""
                 val note = backStackEntry.arguments?.getString("note")
 
                 // Now you can pass these arguments to the FoodOrderScreen
-                //FoodOrderScreen(navController)
+                FoodOrderScreen(navController)
             }
             composable("tracking") {
                 TrackingScreen(

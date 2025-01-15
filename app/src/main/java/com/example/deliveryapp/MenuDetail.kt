@@ -10,13 +10,13 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.example.deliveryapp.ui.theme.Montserrat
-import getRestaurantByID
 import java.util.Date
 
 val sampleRestaurants = listOf(
@@ -134,6 +134,7 @@ fun MenuDetailScreen(menuModel: MenuModel,navController: NavHostController, menu
     }
     val menuItem = menuModel.menu1
 
+    val context = LocalContext.current
 
     var note by remember { mutableStateOf("") }
     var quantity by remember { mutableStateOf(1) }
@@ -234,13 +235,20 @@ fun MenuDetailScreen(menuModel: MenuModel,navController: NavHostController, menu
                         // Add the item to the current order using OrderManager
                         val newOrderItem = OrderItem(
                             itemId = item._id,
+                            name = item.name,
                             imageUrl = R.drawable.img1,
-                            quantity = quantity
+                            quantity = quantity,
+                            price = item.price,
+                            restaurantId = item.restaurantId
                         )
-                        OrderManager.addItemToOrder(newOrderItem,note)
+                        OrderManager.addItemToOrder(
+                            newOrderItem,
+                            context = context,
+                            context
+                        )
 
                         // Navigate to the panier screen with the updated order
-                        navController.navigate("panier2/${OrderManager.getCurrentOrder().orderId}/${note}")
+                        navController.navigate("panier")
                     },
                     colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFFDDB6F))
                 ) {

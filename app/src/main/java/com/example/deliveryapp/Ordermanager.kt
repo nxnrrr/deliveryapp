@@ -1,13 +1,24 @@
 package com.example.deliveryapp
 
+import android.content.Context
+import android.widget.Toast
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 import getRestaurantByID
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import java.util.Date
 
 object OrderManager {
+    private val gson = Gson()
     private var _currentOrder = mutableStateOf<Order?>(null)
     val currentOrder: State<Order?> get() = _currentOrder
+
+    private val _cartItems = MutableStateFlow<List<OrderItem>>(emptyList())
+    val cartItems: StateFlow<List<OrderItem>> = _cartItems.asStateFlow()
 
     internal fun getCurrentOrder(): Order {
         if (_currentOrder.value == null) {
@@ -28,51 +39,69 @@ object OrderManager {
         return _currentOrder.value!!
     }
 
-    // Update item quantity and recalculate the total amount
-    fun updateItemQuantity(itemId: String, delta: Int) {
-        val order = getCurrentOrder()
-        val item = order.items.find { it.itemId == itemId }
+    fun addItemToOrder(item: OrderItem, context: Context?, context1: Context) {
+        val sharedPrefs = context?.getSharedPreferences("cart_prefs", Context.MODE_PRIVATE)
+        
+        // Get existing cart items
+        val cartJson = sharedPrefs?.getString("cart_items", "[]")
+        val type = object : TypeToken<MutableList<OrderItem>>() {}.type
+        val cartItems = gson.fromJson<MutableList<OrderItem>>(cartJson, type)
+
+        // Check if item already exists
+        val existingItem = cartItems.find { it.itemId == item.itemId }
+        if (existingItem != null) {
+            existingItem.quantity += item.quantity
+        } else {
+            cartItems.add(item)
+        }
+
+        // Save updated cart
+        val editor = sharedPrefs?.edit()
+        if (editor != null) {
+            editor.putString("cart_items", gson.toJson(cartItems))
+            editor.apply()
+        }
+
+        // Show success message
+        Toast.makeText(context, "Ajouté au panier avec succès", Toast.LENGTH_SHORT).show()
+    }
+
+    fun getCartItems(context: Context): List<OrderItem> {
+        val sharedPrefs = context.getSharedPreferences("cart_prefs", Context.MODE_PRIVATE)
+        val cartJson = sharedPrefs.getString("cart_items", "[]")
+        val type = object : TypeToken<List<OrderItem>>() {}.type
+        return gson.fromJson(cartJson, type)
+    }
+
+    fun updateItemQuantity(itemId: String, delta: Int, context: Context) {
+        val sharedPrefs = context.getSharedPreferences("cart_prefs", Context.MODE_PRIVATE)
+        val cartJson = sharedPrefs.getString("cart_items", "[]")
+        val type = object : TypeToken<MutableList<OrderItem>>() {}.type
+        val cartItems = gson.fromJson<MutableList<OrderItem>>(cartJson, type)
+
+        val item = cartItems.find { it.itemId == itemId }
         item?.let {
             it.quantity += delta
             if (it.quantity <= 0) {
-                order.items.remove(it)
+                cartItems.remove(it)
             }
         }
-        updateTotalAmount()
+
+        val editor = sharedPrefs.edit()
+        editor.putString("cart_items", gson.toJson(cartItems))
+        editor.apply()
     }
 
-    fun addItemToOrder(item: OrderItem, Note: String?) {
-        // Get the current order
-        val order = getCurrentOrder()
+    fun clearCart(context: Context) {
+        val sharedPrefs = context.getSharedPreferences("cart_prefs", Context.MODE_PRIVATE)
+        sharedPrefs.edit().remove("cart_items").apply()
+    }
 
-        // Check if the item already exists in the order
-        val existingItem = order.items.find { it.itemId == item.itemId }
-        if (existingItem != null) {
-            // Update the quantity of the existing item
-            existingItem.quantity += item.quantity
-        } else {
-            // Add the new item to the order
-            order.items.add(item)
-        }
-
-        // Recalculate the total amount and cast it to Float
-        order.totalAmount = (order.items.sumOf {
-            (it.quantity * getItemPrice(it.itemId, order.restaurantId)).toDouble()
-        }).toFloat()
-
-        // Update the order's last update date
-        order.updatedAt = Date()
-
-        // Append the new note to the delivery notes, ensuring it's not null
-        if (Note != null) {
-            order.deliveryNotes = order.deliveryNotes + " " + Note
-        }
-
-        // Debug: Log the updated order state
-        println("Updated Order: $order")
-
-        // Trigger state change to notify UI
-        _currentOrder.value = order
+    fun getTotalAmount(context: Context): Float {
+        val cartItems = getCartItems(context)
+        return cartItems.sumOf { 
+            (it.quantity * getItemPrice(it.itemId, it.restaurantId)).toDouble()
+        }.toFloat()
     }
 
     // Recalculate total amount based on the items in the order

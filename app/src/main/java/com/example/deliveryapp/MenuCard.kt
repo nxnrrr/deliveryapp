@@ -30,87 +30,77 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.example.deliveryapp.ui.theme.Montserrat
-
+import androidx.compose.material3.Button
+import androidx.compose.ui.platform.LocalContext
 
 @Composable
-fun MenuCard(navController: NavHostController, menuItem: MenuItem, function: () -> Unit) {
-            Card(
-
-    shape = RoundedCornerShape(16.dp),
-                colors = CardDefaults.cardColors(
-                    containerColor = Color(0xFFFFFFF)
-                ),
+fun MenuCard(navController: NavHostController, menuItem: MenuItem, onAddToCart: () -> Unit) {
+    val context = LocalContext.current
+    Card(
+        shape = RoundedCornerShape(16.dp),
+        colors = CardDefaults.cardColors(
+            containerColor = Color(0xFFFFFFF)
+        ),
+        modifier = Modifier
+            .padding(horizontal = 20.dp, vertical = 10.dp)
+            .clickable(onClick = { navController.navigate("menu_detail/${menuItem._id}")  })
+            .fillMaxWidth()
+    ) {
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
+            Box(
                 modifier = Modifier
-                    .padding(horizontal = 20.dp, vertical = 10.dp)
-                    .clickable(onClick = { navController.navigate("menu_detail/${menuItem._id}")  })
-
-                .fillMaxWidth()
+                    .padding(horizontal = 8.dp)
+                    .size(120.dp) // Box size
+                    .clip(RoundedCornerShape(25.dp))
+                    .background(Color(0xFFFDDB6F)), // Box background color
+                contentAlignment = Alignment.Center // Center the content inside the Box
             ) {
-
-                Row(
-                            verticalAlignment = Alignment.CenterVertically,
-
-                ) {
-                    Box(
-                        modifier = Modifier
-                            .padding(horizontal = 8.dp)
-                            .size(120.dp) // Box size
-                            .clip(RoundedCornerShape(25.dp))
-                            .background(Color(0xFFFDDB6F)), // Box background color
-                        contentAlignment = Alignment.Center // Center the content inside the Box
-                    ) {
-                        Image(
-                            painter = painterResource(R.drawable.img1), // Replace with your image resource
-                            contentDescription = null,
-                            modifier = Modifier
-                                .size(110.dp) // Image size
-                        )
-                    }
-
-
-                    Spacer(modifier = Modifier.width(5.dp))
-
-                    // Product Info
-                    Column(
-                        modifier = Modifier.weight(1f)
-                            .padding(top = 8.dp)
-
-                    ) {
-                        Text(
-                            text = menuItem.name,
-                            fontFamily = Montserrat,
-                            fontSize = 18.sp,
-                            color = Color(0xFF3E2C0F)
-                        )
-
-                        Text(
-                            text = menuItem.description,
-
-                                    color = Color.Gray,
-                            fontSize = 12.sp
-                        )
-                        Spacer(modifier = Modifier.height(2.dp))
-                        Text(
-                            text = "${menuItem.price} DZD",
-                            color = Color.Black
-                        )
-
-                    }
-
-                    IconButton(onClick = {} ) {
-                        Icon(
-                            imageVector = Icons.Default.Add,
-                            contentDescription = "Increase",
-                            tint = Color.Black
-                        )
-                    }
-                    }
-
-
-
-
+                Image(
+                    painter = painterResource(R.drawable.img1), // Replace with your image resource
+                    contentDescription = null,
+                    modifier = Modifier
+                        .size(110.dp) // Image size
+                )
             }
-                }
+
+            Spacer(modifier = Modifier.width(5.dp))
+
+            // Product Info
+            Column(
+                modifier = Modifier.weight(1f)
+                    .padding(top = 8.dp)
+            ) {
+                Text(
+                    text = menuItem.name,
+                    fontFamily = Montserrat,
+                    fontSize = 18.sp,
+                    color = Color(0xFF3E2C0F)
+                )
+
+                Text(
+                    text = menuItem.description,
+                    color = Color.Gray,
+                    fontSize = 12.sp
+                )
+                Spacer(modifier = Modifier.height(2.dp))
+                Text(
+                    text = "${menuItem.price} DZD",
+                    color = Color.Black
+                )
+            }
+
+            IconButton(onClick = { navController.navigate("menu_detail/${menuItem._id}")  } ) {
+                Icon(
+                    imageVector = Icons.Default.Add,
+                    contentDescription = "Increase",
+                    tint = Color.Black
+                )
+            }
+        }
+    }
+}
 
 
 

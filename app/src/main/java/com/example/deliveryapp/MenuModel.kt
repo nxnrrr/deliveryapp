@@ -1,4 +1,3 @@
-
 package com.example.deliveryapp
 
 import android.util.Log
@@ -14,16 +13,13 @@ import kotlinx.coroutines.launch
 
 class MenuModel: ViewModel() {
 
-
-
     val menu = mutableStateOf<List<MenuItem>>(emptyList())
     var menu1: MenuItem? = null
 
-
-
+    val isLoading = mutableStateOf(false)
 
     fun getMenu(restoID: String){
-
+        isLoading.value = true
         viewModelScope.launch {
             val response = RetrofitClient.api.getMenuByRestaurantId(restoID)
             if (response.isSuccessful) {
@@ -32,16 +28,13 @@ class MenuModel: ViewModel() {
             else{
 
             }
-
+            isLoading.value = false
         }
-
     }
-
 
     fun getMenubyId(menuID: String) {
         viewModelScope.launch {
             try {
-
                 // Effectuer l'appel API pour récupérer le restaurant
                 val response = RetrofitClient.api.getMenubyId(menuID)
 
@@ -62,9 +55,8 @@ class MenuModel: ViewModel() {
             } finally {
             }
         }
-
-
-    }}
+    }
+}
 
 
 
