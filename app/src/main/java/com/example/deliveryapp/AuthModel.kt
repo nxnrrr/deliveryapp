@@ -81,6 +81,41 @@ class AuthModel: ViewModel() {
         }
     }
 
+    fun loginWithGoogle(googleId: String) {
+        viewModelScope.launch {
+            try {
+                isLoading.value = true
+                authErrorMessage.value = ""
+
+                val googleRequest = GoogleRequest(googleId)
+
+                val response = RetrofitClient.api.loginWithGoogle(googleRequest)
+
+                if (response.isSuccessful) {
+                    val authResponse = response.body()
+                    if (authResponse != null) {
+                        isLoggedIn.value = true
+                        user.value = authResponse.data
+                        _authResponse.value = authResponse
+                        Log.d("AuthModel", "Login successful: ${authResponse.data}")
+                    } else {
+                        Log.e("AuthModel", "Login failed: Empty response body")
+                        authErrorMessage.value = "Login failed: Empty response body"
+                    }
+                } else {
+                    val errorBody = response.errorBody()?.string() ?: "Unknown error"
+                    Log.e("AuthModel", "Login failed: $errorBody")
+                    authErrorMessage.value = "Login failed: $errorBody"
+                }
+            } catch (e: Exception) {
+                Log.e("AuthModel", "Login error: ${e.localizedMessage}", e)
+                authErrorMessage.value = "An error occurred during login: ${e.localizedMessage}"
+            } finally {
+                isLoading.value = false
+            }
+        }
+    }
+
 
 
 //    fun register(email: String, password: String, confirmPassword: String) {

@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "57091984739",
+    "project_id": "tdm-api-2ce37",
+    "storage_bucket": "tdm-api-2ce37.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:57091984739:android:2d14f93a6aa7bc8887d756",
+        "android_client_info": {
+          "package_name": "com.example.deliveryapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "57091984739-sq00hv8padg9k447labb2sqrrqo6lrcd.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDviS_DYXspOerFS-i_RWCy1Usx_iadc6c"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "57091984739-sq00hv8padg9k447labb2sqrrqo6lrcd.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

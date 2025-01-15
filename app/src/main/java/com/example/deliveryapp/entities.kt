@@ -133,6 +133,10 @@ data class LoginRequest(
     val password: String,
 )
 
+data class GoogleRequest(
+    val idToken: String,
+)
+
 data class RegisterRequest(
     val email: String,
     val password: String,
@@ -164,7 +168,7 @@ data class AuthResponse(
 
 //map that attaches to every order status an id
 val orderStatusMap = mapOf(
-    "Preparing" to 0,
+    "Pending" to 0,
     "Preparing" to 1,
     "OnTheWay" to 2,
     "Delivered" to 3

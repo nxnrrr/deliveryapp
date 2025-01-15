@@ -31,7 +31,7 @@ fun TrackingScreen(
     onBackPress: () -> Unit,
     orderModel: OrderModel,
     deliveryDate: String = "Nov 15 GMT +01:00",
-    currentStep: Int = 0,
+    currentStep: Int = 2,
     address: String = "Higher National School of Computer Science ESI"
 ) {
 //    val currentOrder by orderModel.currentOrder

@@ -66,6 +66,10 @@ dependencies {
     implementation(libs.androidx.material3)
     implementation(libs.androidx.navigation.runtime.ktx)
     implementation(libs.androidx.navigation.compose)
+    implementation(libs.androidx.credentials)
+    implementation(libs.googleid)
+    implementation(libs.firebase.auth.ktx)
+    implementation(libs.protolite.well.known.types)
 
     // Test dependencies
     testImplementation(libs.junit)
