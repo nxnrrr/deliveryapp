@@ -25,6 +25,12 @@ interface ApiService {
 
     @POST("auth/register")
     suspend fun register(@Body registerRequest: RegisterRequest): Response<AuthResponse>
+
+    @POST("orders/orders")
+    suspend fun placeOrder(@Body orderRequest: OrderRequest): Response<OrderResponse>
+
+    @GET("orders/orders/{orderId}")
+    suspend fun getOrderById(@Path("orderId") orderId: String): Response<OrderResponse>
 //
 //    @GET("auth")
 //    suspend fun checkAuth(): Response<AuthResponse>

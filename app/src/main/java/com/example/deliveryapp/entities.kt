@@ -69,6 +69,7 @@ data class MenuItem(
 
 // Orders data class
 data class Order(
+    val _id: String?,
     val orderId: String,
     val userId: String,
     val restaurantId: String,
@@ -139,8 +140,32 @@ data class RegisterRequest(
     val name: String?,
 )
 
+data class OrderRequest(
+    val userId: String,
+    val restaurantId: String,
+    val items: List<OrderItem>,
+    val totalAmount: Int,
+    val deliveryAddress: String,
+    val deliveryNotes: String?,
+    val status: String,
+)
+
+data class OrderResponse(
+    val status: String,
+    val data: Order,
+    val message: String
+)
+
 data class AuthResponse(
     val status: String,
     val data: User,
     val message: String
+)
+
+//map that attaches to every order status an id
+val orderStatusMap = mapOf(
+    "Preparing" to 0,
+    "Preparing" to 1,
+    "OnTheWay" to 2,
+    "Delivered" to 3
 )

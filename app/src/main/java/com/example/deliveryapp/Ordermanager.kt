@@ -23,6 +23,7 @@ object OrderManager {
     internal fun getCurrentOrder(): Order {
         if (_currentOrder.value == null) {
             _currentOrder.value = Order(
+                _id = null,
                 orderId = "01",
                 userId = "123",
                 restaurantId = "01",

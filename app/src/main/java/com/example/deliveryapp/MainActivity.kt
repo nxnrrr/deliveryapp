@@ -25,6 +25,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.example.deliveryapp.com.example.deliveryapp.OrderModel
 import com.google.gson.Gson
 
 class MainActivity : ComponentActivity() {
@@ -60,6 +61,7 @@ class MainActivity : ComponentActivity() {
         val restaurantModel = ViewModelProvider(this)[RestaurantModel::class.java]
         val authModel = ViewModelProvider(this)[AuthModel::class.java]
         val menuModel = ViewModelProvider(this)[MenuModel::class.java]
+        val orderModel = ViewModelProvider(this)[OrderModel::class.java]
         val restaurants = remember { mutableStateOf<List<Restaurant>>(emptyList()) }
         val isLoading = remember { mutableStateOf(true) } // Pour indiquer que les données sont en cours de chargement
         val errorMessage = remember { mutableStateOf<String?>(null) } // Pour afficher les messages d'erreur
@@ -236,16 +238,18 @@ class MainActivity : ComponentActivity() {
                 val menuId = backStackEntry.arguments?.getString("menuId") ?: ""
                 MenuDetailScreen(menuModel,navController, menuId)
             }
-            composable("panier") { backStackEntry ->
-                val orderId = backStackEntry.arguments?.getString("orderId") ?: ""
-                val note = backStackEntry.arguments?.getString("note")
+            composable("panier") {
 
                 // Now you can pass these arguments to the FoodOrderScreen
-                FoodOrderScreen(navController)
+                FoodOrderScreen(navController, orderModel, onPlaceOrderSuccess = {
+                    navController.navigate("tracking")
+                })
             }
             composable("tracking") {
                 TrackingScreen(
-                    onBackPress = { navController.popBackStack() }
+                    onBackPress = { navController.popBackStack() },
+                    orderModel
+
                 )
             }
         }

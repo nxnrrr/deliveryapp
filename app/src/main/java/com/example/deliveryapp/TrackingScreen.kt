@@ -16,6 +16,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.deliveryapp.com.example.deliveryapp.OrderModel
 
 data class TrackingStatus(
     val id: Int,
@@ -28,10 +29,19 @@ data class TrackingStatus(
 @Composable
 fun TrackingScreen(
     onBackPress: () -> Unit,
+    orderModel: OrderModel,
     deliveryDate: String = "Nov 15 GMT +01:00",
     currentStep: Int = 0,
     address: String = "Higher National School of Computer Science ESI"
 ) {
+//    val currentOrder by orderModel.currentOrder
+//    execute get order once displayed
+//    LaunchedEffect(key1 = currentOrder) {
+//        orderModel.getOrderById(currentOrder?._id ?: "67879b1260d0a21849cb3fba")
+//    }
+
+
+
     val trackingSteps = listOf(
         TrackingStatus(
             0,
@@ -208,15 +218,15 @@ fun TrackingStep(
     }
 }
 
-@Composable
-fun TrackingScreenWithViewModel(
-    viewModel: TrackingViewModel,
-    onBackPress: () -> Unit
-) {
-    val currentStep by viewModel.currentStep.collectAsState()
-
-    TrackingScreen(
-        onBackPress = onBackPress,
-        currentStep = currentStep
-    )
-}
+//@Composable
+//fun TrackingScreenWithViewModel(
+//    viewModel: TrackingViewModel,
+//    onBackPress: () -> Unit
+//) {
+//    val currentStep by viewModel.currentStep.collectAsState()
+//
+//    TrackingScreen(
+//        onBackPress = onBackPress,
+//        currentStep = currentStep
+//    )
+//}

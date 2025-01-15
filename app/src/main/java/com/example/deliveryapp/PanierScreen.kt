@@ -20,12 +20,12 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
-import com.example.deliveryapp.OrderManager.cartItems
+import com.example.deliveryapp.com.example.deliveryapp.OrderModel
 import com.example.deliveryapp.ui.theme.Montserrat
 import java.text.DecimalFormat
 
 @Composable
-fun FoodOrderScreen(navController: NavHostController) {
+fun FoodOrderScreen(navController: NavHostController, orderModel: OrderModel, onPlaceOrderSuccess: () -> Unit) {
     val context = LocalContext.current
     var orders by remember { mutableStateOf(OrderManager.getCartItems(context)) }
 
@@ -35,6 +35,7 @@ fun FoodOrderScreen(navController: NavHostController) {
     val taxesFees = 10.0
     val deliveryFee = 5.0
     val totalPrice = subTotal + taxesFees + deliveryFee
+    val isLoading by orderModel.isLoading
 
     // Effect to update orders when SharedPreferences changes
     LaunchedEffect(Unit) {
@@ -102,7 +103,23 @@ fun FoodOrderScreen(navController: NavHostController) {
         ) {
             Button(
                 onClick = {
-                    navController.navigate("tracking")
+                    // place new order
+                    val orderRequest = OrderRequest(
+                        userId = "67733f029830e0566597ed68",
+                        restaurantId = "67733f029830e0566597ed68",
+                        items = orders.map { OrderItem(
+                            it.itemId, it.name,
+                            imageUrl = it.imageUrl,
+                            quantity = it.imageUrl,
+                            price = it.quantity * it.price,
+                            restaurantId = it.restaurantId
+                        ) },
+                        totalAmount = totalPrice.toInt(),
+                        status = "Pending",
+                        deliveryAddress = "Higher National School of Comouter Science ESI ex INI, Oued Smar, Algiers",
+                        deliveryNotes = "Please call when you arrive"
+                    )
+                    orderModel.placeOrder(orderRequest, onPlaceOrderSuccess)
                 },
                 modifier = Modifier
                     .width(300.dp)
@@ -110,7 +127,7 @@ fun FoodOrderScreen(navController: NavHostController) {
                 colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFA9411D))
             ) {
                 Text(
-                    text = "Checkout",
+                    text = if (isLoading) "Placing Order..." else "Checkout",
                     color = Color.White,
                     fontSize = 16.sp,
                     fontFamily = FontFamily(Font(R.font.bold))
