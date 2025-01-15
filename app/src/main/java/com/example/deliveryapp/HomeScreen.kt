@@ -1,6 +1,7 @@
 package com.example.deliveryapp
 
 import android.content.Context.MODE_PRIVATE
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -26,6 +27,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
+import coil.compose.rememberAsyncImagePainter
 import com.google.gson.Gson
 
 @Composable
@@ -48,6 +50,7 @@ fun Acceuil(restaurantModel: RestaurantModel, navController: NavHostController, 
     val userJson = sharedPrefs.getString("userInfo", null)
     val userInfo = if (userJson != null) Gson().fromJson(userJson, Map::class.java) else null
     val name = userInfo?.get("name") as? String ?: "User"
+    val img = userInfo?.get("image") as? String ?: ""
 
     LaunchedEffect(true) {
         restaurantModel.getRestaurants()
@@ -155,7 +158,7 @@ fun Acceuil(restaurantModel: RestaurantModel, navController: NavHostController, 
                         // Profile Image with Dropdown
                         Box {
                             Image(
-                                painter = painterResource(id = R.drawable.img1),
+                                painter = rememberAsyncImagePainter(model = img),
                                 contentDescription = "Profile Image",
                                 contentScale = ContentScale.Crop,
                                 modifier = Modifier
@@ -197,6 +200,7 @@ fun Acceuil(restaurantModel: RestaurantModel, navController: NavHostController, 
                             contentDescription = "Search Icon",
                             tint = Color.Gray,
                             modifier = Modifier.clickable {
+                                Log.d("RestaurantListComposable", "Entered composable with searchText: $searchText")
                                 navController.navigate(("restaurant_list?searchText=$searchText"))
                             }
                         )

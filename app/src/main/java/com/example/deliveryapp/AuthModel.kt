@@ -14,6 +14,7 @@ class AuthModel: ViewModel() {
     val isRegistered = mutableStateOf(false)
     val authErrorMessage = mutableStateOf("")
     val user = mutableStateOf<User?>(null)
+    val user1 = mutableStateOf<User?>(null)
     private val _authResponse = mutableStateOf<AuthResponse?>(null)
 
     fun login(loginRequest: LoginRequest) {
@@ -79,6 +80,8 @@ class AuthModel: ViewModel() {
             }
         }
     }
+
+
 
 //    fun register(email: String, password: String, confirmPassword: String) {
 //        viewModelScope.launch {

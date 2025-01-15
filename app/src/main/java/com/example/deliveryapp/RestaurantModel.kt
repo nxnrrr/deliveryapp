@@ -49,14 +49,14 @@ class RestaurantModel: ViewModel() {
                 isLoading.value = true
                 val response = RetrofitClient.api.searchRestaurants(searchText)
 
-                if (response.isSuccessful && response.body() != null) {
+                if (response.isSuccessful) {
                     cc.value = response.body()!!
-
                 } else {
-                    // Log l'erreur dans Logcat
-                    Log.e("RestaurantSearch", "Erreur API : Code réponse non réussi")
+                    // Affichez le code de statut HTTP de la réponse
+                    Log.e("RestaurantSearch", "Erreur API : Code réponse ${response.code()} - ${response.message()}")
                     errorMessage = "Erreur lors de la récupération des restaurants."
                 }
+
             } catch (e: Exception) {
                 // Log l'exception dans Logcat
                 Log.e("RestaurantSearch", "Erreur lors de la recherche: ${e.localizedMessage}")

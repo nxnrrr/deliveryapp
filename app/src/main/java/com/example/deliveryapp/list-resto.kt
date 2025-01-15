@@ -1,3 +1,4 @@
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -119,6 +120,7 @@ fun RestaurantList(
                 modifier = Modifier.fillMaxWidth()
             ) {
                 items(restaurants) { restaurant ->
+                    Log.d("cc","okkddo")
                     RestaurantItem(restaurant, navController)
 
                       Spacer(modifier = Modifier.height(8.dp))

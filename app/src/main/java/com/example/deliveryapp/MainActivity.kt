@@ -3,6 +3,7 @@ package com.example.deliveryapp
 
 import RestaurantList
 import android.os.Bundle
+import android.util.Log
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -226,7 +227,9 @@ class MainActivity : ComponentActivity() {
                 val searchText = backStackEntry.arguments?.getString("searchText") ?: ""
 
                 // Passer searchText au composant RestaurantList
+
                 RestaurantList(restaurantModel, navController, searchText, isLoading.value, errorMessage.value)
+
             }
 
 

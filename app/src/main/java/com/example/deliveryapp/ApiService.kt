@@ -10,9 +10,12 @@ import retrofit2.http.Query
 interface ApiService {
     @GET("restaurants/restaurants")  // Assurez-vous que l'URL correspond à votre backend
     suspend fun getRestaurants(): Response<List<Restaurant>>
-    @GET("search")
+
+    @GET("restaurants/search")
     suspend fun searchRestaurants(@Query("q") query: String): Response<List<Restaurant>>
+
     @GET("restaurants/menu/{restaurantId}")
+
     suspend fun getMenuByRestaurantId(@Path("restaurantId") restaurantId: String): Response<List<MenuItem>>
     @GET("restaurants/restaurants/{id}")
     suspend fun getRestaurantById(@Path("id") restaurantId: String): Response<Restaurant>
@@ -31,6 +34,7 @@ interface ApiService {
 
     @GET("orders/orders/{orderId}")
     suspend fun getOrderById(@Path("orderId") orderId: String): Response<OrderResponse>
+
 //
 //    @GET("auth")
 //    suspend fun checkAuth(): Response<AuthResponse>
