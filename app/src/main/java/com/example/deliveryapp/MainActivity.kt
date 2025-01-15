@@ -3,6 +3,7 @@ package com.example.deliveryapp
 
 import RestaurantList
 import android.os.Bundle
+import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
@@ -91,16 +92,19 @@ class MainActivity : ComponentActivity() {
             }
 
             composable("register_step_two") {
-                RegisterScreenTwo(onRegisterSuccess = {
-                        navController.navigate("verification_code") {
-                            popUpTo("register") { inclusive = true }
+                RegisterScreenTwo(
+                    onRegisterSuccess = {
+                        navController.navigate("login") {
+                            popUpTo("login") { inclusive = true }
                         }
+                        Toast.makeText(context, "Registered with success, check your email for verification", Toast.LENGTH_SHORT).show()
                     },
                     onLogin = {
                         navController.navigate("login") {
                             popUpTo("register") { inclusive = true }
                         }
-                    }
+                    },
+                    authModel = authModel
                 )
             }
 

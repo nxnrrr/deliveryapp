@@ -11,6 +11,7 @@ class AuthModel: ViewModel() {
 
     val isLoading = mutableStateOf(false)
     val isLoggedIn = mutableStateOf(false)
+    val isRegistered = mutableStateOf(false)
     val authErrorMessage = mutableStateOf("")
     val user = mutableStateOf<User?>(null)
     private val _authResponse = mutableStateOf<AuthResponse?>(null)
@@ -48,7 +49,7 @@ class AuthModel: ViewModel() {
         }
     }
 
-    fun register(registerRequest: RegisterRequest) {
+    fun register(registerRequest: RegisterRequest, onRegisterSuccess: () -> Unit) {
         viewModelScope.launch {
             try {
                 isLoading.value = true
@@ -59,9 +60,8 @@ class AuthModel: ViewModel() {
                 if (response.isSuccessful) {
                     val authResponse = response.body()
                     if (authResponse != null) {
-                        isLoggedIn.value = true
-                        user.value = authResponse.data
                         Log.d("AuthModel", "Registration successful: ${authResponse.data}")
+                        onRegisterSuccess()
                     } else {
                         Log.e("AuthModel", "Registration failed: Empty response body")
                         authErrorMessage.value = "Registration failed: Empty response body"

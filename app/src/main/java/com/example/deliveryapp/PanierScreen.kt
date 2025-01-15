@@ -16,9 +16,11 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
+import com.example.deliveryapp.OrderManager.cartItems
 import com.example.deliveryapp.ui.theme.Montserrat
 import java.text.DecimalFormat
 
@@ -82,7 +84,16 @@ fun FoodOrderScreen(navController: NavHostController) {
             }
         }
         Spacer(modifier = Modifier.height(16.dp))
-        SummarySection(subTotal, taxesFees, deliveryFee, totalPrice)
+        if (orders.isEmpty()) {
+            EmptyCartMessage()
+        } else {
+            SummarySection(
+                subTotal = subTotal,
+                taxesFees = taxesFees,
+                deliveryFee = deliveryFee,
+                totalPrice = totalPrice
+            )
+        }
         Spacer(modifier = Modifier.height(30.dp))
 
         Box(
@@ -90,7 +101,9 @@ fun FoodOrderScreen(navController: NavHostController) {
             contentAlignment = Alignment.Center
         ) {
             Button(
-                onClick = { },
+                onClick = {
+                    navController.navigate("tracking")
+                },
                 modifier = Modifier
                     .width(300.dp)
                     .height(50.dp),
@@ -245,6 +258,21 @@ fun FoodCard(orderItem: OrderItem,
                 )
             }
         }
+    }
+}
+
+@Composable
+fun EmptyCartMessage() {
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(16.dp),
+        contentAlignment = Alignment.Center
+    ) {
+        Text(
+            text = "No items added to cart yet",
+            textAlign = TextAlign.Center
+        )
     }
 }
 

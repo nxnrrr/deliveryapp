@@ -195,7 +195,7 @@ fun RegisterScreenOne(
                     val sharedPrefs =
                         context.getSharedPreferences("user_prefs", MODE_PRIVATE)
                     sharedPrefs.edit()
-                        .putString("password", phoneNumber)
+                        .putString("phoneNumber", phoneNumber)
                         .putString("email", email)
                         .putString("name", name)
                         .apply()
@@ -280,7 +280,7 @@ fun RegisterScreenOne(
                     val sharedPrefs =
                         context.getSharedPreferences("user_prefs", MODE_PRIVATE)
                     sharedPrefs.edit()
-                        .putString("password", phoneNumber)
+                        .putString("phoneNumber", phoneNumber)
                         .putString("email", email)
                         .putString("name", name)
                         .apply()
@@ -361,7 +361,8 @@ fun RegisterScreenOne(
 
 @Composable
 fun RegisterScreenTwo(onRegisterSuccess: () -> Unit,
-                      onLogin: () -> Unit) {
+                      onLogin: () -> Unit,
+                      authModel: AuthModel) {
     var password by remember { mutableStateOf("") }
     var confirmPassword by remember { mutableStateOf("") }
     val context = LocalContext.current
@@ -373,7 +374,17 @@ fun RegisterScreenTwo(onRegisterSuccess: () -> Unit,
     val image = painterResource(id = R.drawable.header)
     var isFocusedPassword by remember { mutableStateOf(false) }
     var isFocusedConfirmedPassword by remember { mutableStateOf(false) }
+    val user by authModel.user
+    val isRegistered by authModel.isRegistered
+    val isLoading by authModel.isLoading
 
+    LaunchedEffect(user) {
+        if (isRegistered) {
+            onRegisterSuccess()
+        } else if (!authModel.isLoading.value && authModel.authErrorMessage.value.isNotEmpty()) {
+            Toast.makeText(context, "Register failed. Please try again.", Toast.LENGTH_SHORT).show()
+        }
+    }
     Box(
         modifier = Modifier
             .fillMaxWidth()
@@ -505,7 +516,7 @@ fun RegisterScreenTwo(onRegisterSuccess: () -> Unit,
                             context.getSharedPreferences("user_prefs", MODE_PRIVATE)
                         val email = sharedPrefs.getString("email", "")
                         val name = sharedPrefs.getString("name", "")
-                        var phoneNumber = sharedPrefs.getString("phone", "")
+                        val phoneNumber = sharedPrefs.getString("phoneNumber", "")
                         val registerRequest = email?.let {
                             RegisterRequest(
                                 name = name,
@@ -515,8 +526,9 @@ fun RegisterScreenTwo(onRegisterSuccess: () -> Unit,
                             )
                         }
                         // Call the register API
-                        // authModel.register(registerRequest)
-                        onRegisterSuccess()
+                        if (registerRequest != null) {
+                            authModel.register(registerRequest, onRegisterSuccess)
+                        }
                     } else {
                         Toast.makeText(context, "Passwords do not match", Toast.LENGTH_SHORT).show()
                     }
@@ -536,7 +548,7 @@ fun RegisterScreenTwo(onRegisterSuccess: () -> Unit,
             ),
             shape = RoundedCornerShape(28.5.dp),
         ) {
-            Text(fontSize = 20.sp, text = "Next", fontWeight = FontWeight.Bold)
+            Text(fontSize = 20.sp, text = if (isLoading) "Registering..." else "Register", fontWeight = FontWeight.Bold)
         }
         Spacer(modifier = Modifier.height(8.dp))
         Row(
@@ -646,7 +658,7 @@ fun AuthScreen(
     val user by authModel.user
     val isLoading by authModel.isLoading
     LaunchedEffect(user) {
-        if (user != null) {
+        if (user != null && user!!.isVerified) {
             onLoginSuccess(user!!)
         } else if (!authModel.isLoading.value && authModel.authErrorMessage.value.isNotEmpty()) {
             Toast.makeText(context, "Login failed. Please check your credentials.", Toast.LENGTH_SHORT).show()
